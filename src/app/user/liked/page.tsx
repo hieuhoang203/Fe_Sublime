@@ -194,11 +194,11 @@ export default function LikedSongs() {
             {/* Playlist Stats */}
             <div className="flex items-center gap-6 text-spotify-text-gray">
               <span className="flex items-center gap-1">
-                <Music className="h-4 w-4" />
+                <Music className="h-4 w-4 text-white/70" />
                 {likedSongs.length} songs
               </span>
               <span className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
+                <Clock className="h-4 w-4 text-white/70" />
                 {formatTotalDuration(totalDuration)}
               </span>
               <span>
@@ -225,7 +225,7 @@ export default function LikedSongs() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-14 w-14"
+                className="h-14 w-14 text-white/70 hover:text-white hover:bg-white/10"
                 disabled={likedSongs.length === 0}
               >
                 <Shuffle className="h-6 w-6" />
@@ -233,7 +233,7 @@ export default function LikedSongs() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-14 w-14"
+                className="h-14 w-14 text-white/70 hover:text-white hover:bg-white/10"
                 disabled={likedSongs.length === 0}
               >
                 <Repeat className="h-6 w-6" />
@@ -241,7 +241,7 @@ export default function LikedSongs() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-14 w-14"
+                className="h-14 w-14 text-white/70 hover:text-white hover:bg-white/10"
                 disabled={likedSongs.length === 0}
               >
                 <Download className="h-6 w-6" />
@@ -249,7 +249,7 @@ export default function LikedSongs() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-14 w-14"
+                className="h-14 w-14 text-white/70 hover:text-white hover:bg-white/10"
                 disabled={likedSongs.length === 0}
               >
                 <MoreVertical className="h-6 w-6" />
@@ -263,7 +263,7 @@ export default function LikedSongs() {
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
                 <Input
                   placeholder="Search in your liked songs..."
                   value={searchTerm}
@@ -284,7 +284,7 @@ export default function LikedSongs() {
                     </option>
                   ))}
                 </select>
-                <Button variant="spotifySecondary" size="sm">
+                <Button variant="spotifySecondary" size="sm" className="text-white">
                   <Filter className="h-4 w-4 mr-2" />
                   Filter
                 </Button>
@@ -324,7 +324,7 @@ export default function LikedSongs() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <Music className="h-6 w-6 text-spotify-text-gray" />
+                      <Music className="h-6 w-6 text-white/70" />
                     )}
                   </div>
 
@@ -372,14 +372,14 @@ export default function LikedSongs() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-spotify-text-gray hover:text-white"
+                      className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
                     >
                       <Play className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-spotify-text-gray hover:text-white"
+                      className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
                     >
                       <MoreVertical className="h-4 w-4" />
                     </Button>
@@ -389,7 +389,7 @@ export default function LikedSongs() {
 
               {filteredSongs.length === 0 && (
                 <div className="text-center py-12">
-                  <Heart className="h-12 w-12 text-spotify-text-gray mx-auto mb-4" />
+                  <Heart className="h-12 w-12 text-white/70 mx-auto mb-4" />
                   <h3 className="text-white text-lg font-medium mb-2">
                     {searchTerm || filterGenre !== "all"
                       ? "No songs found"

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { UserForm } from "@/components/forms/user-form";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Users,
   Search,
@@ -29,6 +30,7 @@ export default function AdminUsers() {
   const [userFormOpen, setUserFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const { confirm, ConfirmDialog } = useConfirmDialog();
 
   const users = [
     {
@@ -112,6 +114,25 @@ export default function AdminUsers() {
     setUserFormOpen(true);
   };
 
+  const handleDeleteUser = async (userId: string) => {
+    const user = users.find(u => u.id === userId);
+    const confirmed = await confirm({
+      title: "Delete User",
+      description: `Are you sure you want to delete ${user?.name}? This action cannot be undone.`,
+      variant: "destructive",
+      confirmText: "Delete User",
+      cancelText: "Cancel"
+    });
+
+    if (confirmed) {
+      setLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("User deleted:", userId);
+      setLoading(false);
+    }
+  };
+
   const stats = [
     {
       title: "Total Users",
@@ -192,7 +213,7 @@ export default function AdminUsers() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
                   <Input
                     placeholder="Search users by name or email..."
                     className="pl-10 bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray"
@@ -329,7 +350,8 @@ export default function AdminUsers() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-red-400 hover:text-red-300"
+                            className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                            onClick={() => handleDeleteUser(user.id)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -363,6 +385,9 @@ export default function AdminUsers() {
         initialData={editingUser}
         loading={loading}
       />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog />
     </MainLayout>
   );
 }

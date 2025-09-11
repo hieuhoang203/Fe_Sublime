@@ -195,14 +195,14 @@ export default function UserDashboard() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 hover:scale-110 hover:text-red-400 transition-all duration-300"
+                          className="h-8 w-8 text-white/70 hover:scale-110 hover:text-red-400 transition-all duration-300"
                         >
                           <Heart className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 hover:scale-110 transition-all duration-300"
+                          className="h-8 w-8 text-white/70 hover:scale-110 hover:text-white transition-all duration-300"
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { AlbumForm } from "@/components/forms/album-form";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Album,
   Search,
@@ -38,6 +39,7 @@ export default function AdminAlbums() {
   const [statusFilter, setStatusFilter] = useState<
     "all" | "draft" | "published" | "archived"
   >("all");
+  const { confirm, ConfirmDialog } = useConfirmDialog();
 
   const albums = [
     {
@@ -171,8 +173,23 @@ export default function AdminAlbums() {
     console.log("Toggle status for album:", albumId);
   };
 
-  const handleDeleteAlbum = (albumId: string) => {
-    console.log("Delete album:", albumId);
+  const handleDeleteAlbum = async (albumId: string) => {
+    const album = albums.find(a => a.id === albumId);
+    const confirmed = await confirm({
+      title: "Delete Album",
+      description: `Are you sure you want to delete "${album?.title}" by ${album?.artist}? This will also remove all songs in this album. This action cannot be undone.`,
+      variant: "destructive",
+      confirmText: "Delete Album",
+      cancelText: "Cancel"
+    });
+
+    if (confirmed) {
+      setLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Album deleted:", albumId);
+      setLoading(false);
+    }
   };
 
   const filteredAlbums = albums.filter((album) => {
@@ -249,7 +266,7 @@ export default function AdminAlbums() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
                   <Input
                     placeholder="Search albums by title, artist, genre, or label..."
                     value={searchQuery}
@@ -360,7 +377,7 @@ export default function AdminAlbums() {
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <Album className="h-6 w-6 text-spotify-text-gray" />
+                              <Album className="h-6 w-6 text-white/70" />
                             )}
                           </div>
                           <div>
@@ -380,7 +397,7 @@ export default function AdminAlbums() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-spotify-text-gray" />
+                          <User className="h-4 w-4 text-white/70" />
                           <span className="text-white">{album.artist}</span>
                         </div>
                       </td>
@@ -396,7 +413,7 @@ export default function AdminAlbums() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-1 text-sm text-white">
-                          <Music className="h-4 w-4 text-spotify-text-gray" />
+                          <Music className="h-4 w-4 text-white/70" />
                           {album.totalTracks}
                         </div>
                       </td>
@@ -476,6 +493,9 @@ export default function AdminAlbums() {
         initialData={editingAlbum}
         loading={loading}
       />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog />
     </MainLayout>
   );
 }

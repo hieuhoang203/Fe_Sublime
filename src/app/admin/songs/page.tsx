@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { SongForm } from "@/components/forms/song-form";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Music,
   Search,
@@ -37,6 +38,7 @@ export default function AdminSongs() {
   const [songFormOpen, setSongFormOpen] = useState(false);
   const [editingSong, setEditingSong] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const { confirm, ConfirmDialog } = useConfirmDialog();
 
   const songs = [
     {
@@ -107,6 +109,25 @@ export default function AdminSongs() {
   const handleAddSong = () => {
     setEditingSong(null);
     setSongFormOpen(true);
+  };
+
+  const handleDeleteSong = async (songId: string) => {
+    const song = songs.find(s => s.id === songId);
+    const confirmed = await confirm({
+      title: "Delete Song",
+      description: `Are you sure you want to delete "${song?.title}" by ${song?.artist}? This action cannot be undone.`,
+      variant: "destructive",
+      confirmText: "Delete Song",
+      cancelText: "Cancel"
+    });
+
+    if (confirmed) {
+      setLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Song deleted:", songId);
+      setLoading(false);
+    }
   };
 
   const stats = [
@@ -216,7 +237,7 @@ export default function AdminSongs() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
                   <Input
                     placeholder="Search songs by title, artist, or album..."
                     className="pl-10 bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray"
@@ -307,7 +328,7 @@ export default function AdminSongs() {
                                 className="w-full h-full object-cover rounded-lg"
                               />
                             ) : (
-                              <Music className="h-5 w-5 text-spotify-text-gray" />
+                              <Music className="h-5 w-5 text-white/70" />
                             )}
                           </div>
                           <div>
@@ -329,7 +350,7 @@ export default function AdminSongs() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <Album className="h-4 w-4 text-spotify-text-gray" />
+                          <Album className="h-4 w-4 text-white/70" />
                           <span className="text-white">{song.album}</span>
                         </div>
                       </td>
@@ -388,7 +409,8 @@ export default function AdminSongs() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-red-400 hover:text-red-300"
+                            className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                            onClick={() => handleDeleteSong(song.id)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -428,6 +450,9 @@ export default function AdminSongs() {
           { id: "4", name: "Sarah Wilson" },
         ]}
       />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog />
     </MainLayout>
   );
 }

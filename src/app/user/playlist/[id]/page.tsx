@@ -380,26 +380,26 @@ export default function PlaylistDetail() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-spotify-text-gray hover:text-white"
+                      className="h-8 w-8 text-white/70 hover:text-red-400 hover:bg-red-400/10"
                       onClick={() => handleLikeSong(song.id)}
                     >
                       <Heart
                         className={`h-4 w-4 ${
-                          song.isLiked ? "text-red-400 fill-current" : ""
+                          song.isLiked ? "text-red-400 fill-current" : "text-current"
                         }`}
                       />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-spotify-text-gray hover:text-white"
+                      className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
                     >
                       <Play className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-spotify-text-gray hover:text-red-400"
+                      className="h-8 w-8 text-white/70 hover:text-red-400 hover:bg-red-400/10"
                       onClick={() => handleRemoveSong(song.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -407,7 +407,7 @@ export default function PlaylistDetail() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-spotify-text-gray hover:text-white"
+                      className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
                     >
                       <MoreVertical className="h-4 w-4" />
                     </Button>

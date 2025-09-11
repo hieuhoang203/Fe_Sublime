@@ -310,18 +310,18 @@ export default function UserLibrary() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-gray-400 hover:text-gray-300 hover:bg-gray-400/10"
+                          className="h-8 w-8 text-white/70 hover:text-red-400 hover:bg-red-400/10"
                         >
                           <Heart
                             className={`h-4 w-4 ${
-                              song.isLiked ? "text-red-400" : "text-current"
+                              song.isLiked ? "text-red-400 fill-current" : "text-current"
                             }`}
                           />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-gray-400 hover:text-gray-300 hover:bg-gray-400/10"
+                          className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>

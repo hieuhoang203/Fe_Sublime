@@ -179,6 +179,26 @@ export default function Home() {
           </div>
         )}
 
+        {/* Auth Links */}
+        <div className="text-center mt-8 animate-fade-in-up">
+          <div className="flex justify-center gap-4">
+            <Button
+              variant="spotifySecondary"
+              asChild
+              className="px-6 py-3"
+            >
+              <a href="/login">Sign In</a>
+            </Button>
+            <Button
+              variant="spotify"
+              asChild
+              className="px-6 py-3"
+            >
+              <a href="/register">Sign Up</a>
+            </Button>
+          </div>
+        </div>
+
         {/* Features Overview */}
         <div className="mt-20 animate-fade-in-up">
           <h3 className="text-3xl font-bold text-center mb-12 text-gradient">

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { ArtistForm } from "@/components/forms/artist-form";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Mic,
   Search,
@@ -38,6 +39,7 @@ export default function AdminArtists() {
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "inactive"
   >("all");
+  const { confirm, ConfirmDialog } = useConfirmDialog();
 
   const artists = [
     {
@@ -171,8 +173,23 @@ export default function AdminArtists() {
     console.log("Toggle status for artist:", artistId);
   };
 
-  const handleDeleteArtist = (artistId: string) => {
-    console.log("Delete artist:", artistId);
+  const handleDeleteArtist = async (artistId: string) => {
+    const artist = artists.find(a => a.id === artistId);
+    const confirmed = await confirm({
+      title: "Delete Artist",
+      description: `Are you sure you want to delete ${artist?.name}? This will also remove all their songs and albums. This action cannot be undone.`,
+      variant: "destructive",
+      confirmText: "Delete Artist",
+      cancelText: "Cancel"
+    });
+
+    if (confirmed) {
+      setLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Artist deleted:", artistId);
+      setLoading(false);
+    }
   };
 
   const filteredArtists = artists.filter((artist) => {
@@ -219,7 +236,7 @@ export default function AdminArtists() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
                   <Input
                     placeholder="Search artists by name, email, or genre..."
                     value={searchQuery}
@@ -341,13 +358,13 @@ export default function AdminArtists() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-1 text-sm text-white">
-                          <Users className="h-4 w-4 text-spotify-text-gray" />
+                          <Users className="h-4 w-4 text-white/70" />
                           {artist.followers.toLocaleString()}
                         </div>
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-1 text-sm text-white">
-                          <Music className="h-4 w-4 text-spotify-text-gray" />
+                          <Music className="h-4 w-4 text-white/70" />
                           {artist.totalSongs}
                         </div>
                       </td>
@@ -441,6 +458,9 @@ export default function AdminArtists() {
         initialData={editingArtist}
         loading={loading}
       />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog />
     </MainLayout>
   );
 }
