@@ -1,26 +1,853 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.5rem;
+  
+  /* Spotify Color Palette */
+  --background: #121212;
+  --foreground: #ffffff;
+  --card: #181818;
+  --card-foreground: #ffffff;
+  --popover: #282828;
+  --popover-foreground: #ffffff;
+  --primary: #1db954;
+  --primary-foreground: #ffffff;
+  --secondary: #1ed760;
+  --secondary-foreground: #000000;
+  --muted: #282828;
+  --muted-foreground: #b3b3b3;
+  --accent: #1db954;
+  --accent-foreground: #ffffff;
+  --destructive: #e22134;
+  --border: #282828;
+  --input: #282828;
+  --ring: #1db954;
+  
+  /* Spotify Specific Colors */
+  --spotify-green: #1db954;
+  --spotify-green-hover: #1ed760;
+  --spotify-black: #121212;
+  --spotify-gray: #181818;
+  --spotify-light-gray: #282828;
+  --spotify-text-gray: #b3b3b3;
+  --spotify-white: #ffffff;
+  --spotify-hover: #1a1a1a;
+  
+  /* Chart colors */
+  --chart-1: #1db954;
+  --chart-2: #1ed760;
+  --chart-3: #ff6b6b;
+  --chart-4: #4ecdc4;
+  --chart-5: #45b7d1;
+  
+  /* Sidebar colors */
+  --sidebar: #000000;
+  --sidebar-foreground: #b3b3b3;
+  --sidebar-primary: #1db954;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #282828;
+  --sidebar-ring: #1db954;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--spotify-black);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--spotify-light-gray);
+    border-radius: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #404040;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Spotify specific utilities */
+.spotify-gradient {
+  background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+}
+
+.spotify-card {
+  @apply bg-card hover:bg-spotify-hover transition-all duration-300 rounded-lg p-4 shadow-lg hover:shadow-xl;
+}
+
+.spotify-button {
+  @apply bg-spotify-green hover:bg-spotify-green-hover text-black font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl;
+}
+
+.spotify-button-secondary {
+  @apply bg-transparent border border-white/20 hover:border-white text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105;
+}
+
+/* Enhanced animations and effects */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Enhanced card styles */
+.spotify-card-enhanced {
+  @apply bg-gradient-to-br from-spotify-gray to-spotify-light-gray border border-spotify-light-gray hover:border-spotify-green-50 transition-all duration-300 rounded-xl p-6 shadow-2xl hover:shadow-2xl transform hover:-translate-y-1;
+}
+
+.spotify-card-glass {
+  @apply bg-spotify-gray-80 backdrop-blur-sm border border-white/10 hover:border-spotify-green-30 transition-all duration-300 rounded-xl p-6 shadow-xl hover:shadow-2xl;
+}
+
+/* Enhanced button styles */
+.spotify-button-enhanced {
+  @apply bg-gradient-to-r from-spotify-green to-spotify-green-hover hover:from-spotify-green-hover hover:to-spotify-green text-black font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+}
+
+.spotify-button-glow {
+  @apply bg-spotify-green hover:bg-spotify-green-hover text-black font-bold py-2 px-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl;
+}
+
+/* Enhanced input styles */
+.spotify-input {
+  @apply bg-spotify-light-gray border border-spotify-light-gray hover:border-spotify-green-50 focus:border-spotify-green text-white placeholder:text-spotify-text-gray rounded-lg px-4 py-2 transition-all duration-300 focus:ring-2 focus:ring-spotify-green-20;
+  padding-left: 3rem !important; /* Ensure proper spacing for search icon */
+}
+
+/* Music player styles */
+.music-player {
+  @apply bg-gradient-to-r from-spotify-black via-spotify-gray to-spotify-black border-t border-spotify-light-gray backdrop-blur-sm;
+}
+
+/* Enhanced scrollbar */
+.enhanced-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.enhanced-scrollbar::-webkit-scrollbar-track {
+  background: var(--spotify-black);
+  border-radius: 4px;
+}
+
+.enhanced-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--spotify-green), var(--spotify-green-hover));
+  border-radius: 4px;
+}
+
+.enhanced-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--spotify-green-hover), var(--spotify-green));
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply bg-spotify-light-gray animate-pulse rounded;
+}
+
+.skeleton-text {
+  @apply h-4 bg-spotify-light-gray animate-pulse rounded;
+}
+
+.skeleton-circle {
+  @apply w-12 h-12 bg-spotify-light-gray animate-pulse rounded-full;
+}
+
+/* Hover effects */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+.hover-glow {
+  @apply transition-shadow duration-300 hover:shadow-lg;
+}
+
+.hover-scale {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+/* Text effects */
+.text-gradient {
+  @apply bg-gradient-to-r from-spotify-green to-spotify-green-hover bg-clip-text text-transparent;
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+}
+
+/* Status indicators */
+.status-online {
+  @apply w-3 h-3 bg-green-400 rounded-full animate-pulse;
+}
+
+.status-offline {
+  @apply w-3 h-3 bg-red-400 rounded-full;
+}
+
+.status-pending {
+  @apply w-3 h-3 bg-yellow-400 rounded-full animate-pulse;
+}
+
+/* Mobile responsive utilities */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+  
+  .mobile-full-width {
+    width: 100%;
+  }
+  
+  .mobile-text-center {
+    text-align: center;
+  }
+  
+  .mobile-p-4 {
+    padding: 1rem;
+  }
+  
+  .mobile-gap-2 {
+    gap: 0.5rem;
+  }
+  
+  .mobile-grid-1 {
+    grid-template-columns: 1fr;
+  }
+  
+  .mobile-text-sm {
+    font-size: 0.875rem;
+  }
+  
+  .mobile-text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .mobile-text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .mobile-text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .mobile-text-3xl {
+    font-size: 1.875rem;
+  }
+  
+  .mobile-px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .mobile-py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .mobile-py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .mobile-py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .mobile-mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobile-mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-mt-2 {
+    margin-top: 0.5rem;
+  }
+  
+  .mobile-mt-4 {
+    margin-top: 1rem;
+  }
+  
+  .mobile-mt-6 {
+    margin-top: 1.5rem;
+  }
+  
+  .mobile-space-y-2 > * + * {
+    margin-top: 0.5rem;
+  }
+  
+  .mobile-space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  .mobile-space-y-6 > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  .mobile-flex-col {
+    flex-direction: column;
+  }
+  
+  .mobile-items-center {
+    align-items: center;
+  }
+  
+  .mobile-justify-center {
+    justify-content: center;
+  }
+  
+  .mobile-justify-between {
+    justify-content: space-between;
+  }
+  
+  .mobile-w-full {
+    width: 100%;
+  }
+  
+  .mobile-h-auto {
+    height: auto;
+  }
+  
+  .mobile-min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .mobile-overflow-x-auto {
+    overflow-x: auto;
+  }
+  
+  .mobile-overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .mobile-relative {
+    position: relative;
+  }
+  
+  .mobile-absolute {
+    position: absolute;
+  }
+  
+  .mobile-fixed {
+    position: fixed;
+  }
+  
+  .mobile-top-0 {
+    top: 0;
+  }
+  
+  .mobile-left-0 {
+    left: 0;
+  }
+  
+  .mobile-right-0 {
+    right: 0;
+  }
+  
+  .mobile-bottom-0 {
+    bottom: 0;
+  }
+  
+  .mobile-z-50 {
+    z-index: 50;
+  }
+  
+  .mobile-z-40 {
+    z-index: 40;
+  }
+  
+  .mobile-z-30 {
+    z-index: 30;
+  }
+  
+  .mobile-z-20 {
+    z-index: 20;
+  }
+  
+  .mobile-z-10 {
+    z-index: 10;
+  }
+  
+  .mobile-border-0 {
+    border: 0;
+  }
+  
+  .mobile-border-t {
+    border-top-width: 1px;
+  }
+  
+  .mobile-border-b {
+    border-bottom-width: 1px;
+  }
+  
+  .mobile-border-l {
+    border-left-width: 1px;
+  }
+  
+  .mobile-border-r {
+    border-right-width: 1px;
+  }
+  
+  .mobile-rounded-none {
+    border-radius: 0;
+  }
+  
+  .mobile-rounded-sm {
+    border-radius: 0.125rem;
+  }
+  
+  .mobile-rounded {
+    border-radius: 0.25rem;
+  }
+  
+  .mobile-rounded-md {
+    border-radius: 0.375rem;
+  }
+  
+  .mobile-rounded-lg {
+    border-radius: 0.5rem;
+  }
+  
+  .mobile-rounded-xl {
+    border-radius: 0.75rem;
+  }
+  
+  .mobile-rounded-2xl {
+    border-radius: 1rem;
+  }
+  
+  .mobile-rounded-full {
+    border-radius: 9999px;
+  }
+  
+  .mobile-shadow-none {
+    box-shadow: none;
+  }
+  
+  .mobile-shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  .mobile-shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  .mobile-shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .mobile-shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .mobile-shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .mobile-shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  .mobile-backdrop-blur-none {
+    backdrop-filter: none;
+  }
+  
+  .mobile-backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+  
+  .mobile-backdrop-blur {
+    backdrop-filter: blur(8px);
+  }
+  
+  .mobile-backdrop-blur-md {
+    backdrop-filter: blur(12px);
+  }
+  
+  .mobile-backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+  }
+  
+  .mobile-backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+  }
+  
+  .mobile-backdrop-blur-2xl {
+    backdrop-filter: blur(40px);
+  }
+  
+  .mobile-backdrop-blur-3xl {
+    backdrop-filter: blur(64px);
+  }
+  
+  .mobile-bg-opacity-0 {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  
+  .mobile-bg-opacity-5 {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .mobile-bg-opacity-10 {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-bg-opacity-20 {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .mobile-bg-opacity-25 {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  
+  .mobile-bg-opacity-30 {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .mobile-bg-opacity-40 {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .mobile-bg-opacity-50 {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .mobile-bg-opacity-60 {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .mobile-bg-opacity-70 {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .mobile-bg-opacity-75 {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  
+  .mobile-bg-opacity-80 {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .mobile-bg-opacity-90 {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .mobile-bg-opacity-95 {
+    background-color: rgba(0, 0, 0, 0.95);
+  }
+  
+  .mobile-bg-opacity-100 {
+    background-color: rgba(0, 0, 0, 1);
+  }
+  
+  .mobile-text-opacity-0 {
+    color: rgba(0, 0, 0, 0);
+  }
+  
+  .mobile-text-opacity-5 {
+    color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .mobile-text-opacity-10 {
+    color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-text-opacity-20 {
+    color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .mobile-text-opacity-25 {
+    color: rgba(0, 0, 0, 0.25);
+  }
+  
+  .mobile-text-opacity-30 {
+    color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .mobile-text-opacity-40 {
+    color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .mobile-text-opacity-50 {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .mobile-text-opacity-60 {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .mobile-text-opacity-70 {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .mobile-text-opacity-75 {
+    color: rgba(0, 0, 0, 0.75);
+  }
+  
+  .mobile-text-opacity-80 {
+    color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .mobile-text-opacity-90 {
+    color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .mobile-text-opacity-95 {
+    color: rgba(0, 0, 0, 0.95);
+  }
+  
+  .mobile-text-opacity-100 {
+    color: rgba(0, 0, 0, 1);
+  }
+  
+  .mobile-border-opacity-0 {
+    border-color: rgba(0, 0, 0, 0);
+  }
+  
+  .mobile-border-opacity-5 {
+    border-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .mobile-border-opacity-10 {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-border-opacity-20 {
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .mobile-border-opacity-25 {
+    border-color: rgba(0, 0, 0, 0.25);
+  }
+  
+  .mobile-border-opacity-30 {
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .mobile-border-opacity-40 {
+    border-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .mobile-border-opacity-50 {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .mobile-border-opacity-60 {
+    border-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .mobile-border-opacity-70 {
+    border-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .mobile-border-opacity-75 {
+    border-color: rgba(0, 0, 0, 0.75);
+  }
+  
+  .mobile-border-opacity-80 {
+    border-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .mobile-border-opacity-90 {
+    border-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .mobile-border-opacity-95 {
+    border-color: rgba(0, 0, 0, 0.95);
+  }
+  
+  .mobile-border-opacity-100 {
+    border-color: rgba(0, 0, 0, 1);
+  }
+  
+  .mobile-ring-opacity-0 {
+    --tw-ring-opacity: 0;
+  }
+  
+  .mobile-ring-opacity-5 {
+    --tw-ring-opacity: 0.05;
+  }
+  
+  .mobile-ring-opacity-10 {
+    --tw-ring-opacity: 0.1;
+  }
+  
+  .mobile-ring-opacity-20 {
+    --tw-ring-opacity: 0.2;
+  }
+  
+  .mobile-ring-opacity-25 {
+    --tw-ring-opacity: 0.25;
+  }
+  
+  .mobile-ring-opacity-30 {
+    --tw-ring-opacity: 0.3;
+  }
+  
+  .mobile-ring-opacity-40 {
+    --tw-ring-opacity: 0.4;
+  }
+  
+  .mobile-ring-opacity-50 {
+    --tw-ring-opacity: 0.5;
+  }
+  
+  .mobile-ring-opacity-60 {
+    --tw-ring-opacity: 0.6;
+  }
+  
+  .mobile-ring-opacity-70 {
+    --tw-ring-opacity: 0.7;
+  }
+  
+  .mobile-ring-opacity-75 {
+    --tw-ring-opacity: 0.75;
+  }
+  
+  .mobile-ring-opacity-80 {
+    --tw-ring-opacity: 0.8;
+  }
+  
+  .mobile-ring-opacity-90 {
+    --tw-ring-opacity: 0.9;
+  }
+  
+  .mobile-ring-opacity-95 {
+    --tw-ring-opacity: 0.95;
+  }
+  
+  .mobile-ring-opacity-100 {
+    --tw-ring-opacity: 1;
+  }
+  
+  .mobile-shadow-opacity-0 {
+    --tw-shadow-color: rgba(0, 0, 0, 0);
+  }
+  
+  .mobile-shadow-opacity-5 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .mobile-shadow-opacity-10 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-shadow-opacity-20 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .mobile-shadow-opacity-25 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.25);
+  }
+  
+  .mobile-shadow-opacity-30 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .mobile-shadow-opacity-40 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .mobile-shadow-opacity-50 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .mobile-shadow-opacity-60 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .mobile-shadow-opacity-70 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .mobile-shadow-opacity-75 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.75);
+  }
+  
+  .mobile-shadow-opacity-80 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .mobile-shadow-opacity-90 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .mobile-shadow-opacity-95 {
+    --tw-shadow-color: rgba(0, 0, 0, 0.95);
+  }
+  
+  .mobile-shadow-opacity-100 {
+    --tw-shadow-color: rgba(0, 0, 0, 1);
+  }
 }
