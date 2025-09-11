@@ -22,6 +22,8 @@ const buttonVariants = cva(
           "bg-spotify-green hover:bg-spotify-green-hover text-black font-bold rounded-full transition-colors duration-200",
         spotifySecondary:
           "bg-transparent border border-white/20 hover:border-white text-white font-bold rounded-full transition-colors duration-200",
+        warning:
+          "bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-full transition-colors duration-200",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -41,17 +43,40 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      loading = false,
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        disabled={disabled || loading}
         {...props}
-      />
+      >
+        {loading ? (
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            {children}
+          </div>
+        ) : (
+          children
+        )}
+      </Comp>
     );
   }
 );

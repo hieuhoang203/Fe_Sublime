@@ -9,32 +9,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Upload, Music, Mic, Image, FileAudio, X } from "lucide-react";
+import { SongForm } from "@/components/forms/song-form";
+import { AlbumForm } from "@/components/forms/album-form";
+import { Upload, Music, Album, Plus } from "lucide-react";
 import { useState } from "react";
 
 export default function ArtistUpload() {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [songData, setSongData] = useState({
-    title: "",
-    album: "",
-    genre: "",
-    description: "",
-  });
+  const [showSongForm, setShowSongForm] = useState(false);
+  const [showAlbumForm, setShowAlbumForm] = useState(false);
+  const [uploadType, setUploadType] = useState<"song" | "album" | null>(null);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    setUploadedFiles((prev) => [...prev, ...files]);
+  const handleSongSubmit = (data: any) => {
+    console.log("Song uploaded:", data);
+    setShowSongForm(false);
+    // Handle song upload logic here
   };
 
-  const removeFile = (index: number) => {
-    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  const handleAlbumSubmit = (data: any) => {
+    console.log("Album created:", data);
+    setShowAlbumForm(false);
+    // Handle album creation logic here
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log("Uploading:", { songData, uploadedFiles });
+  const handleUploadType = (type: "song" | "album") => {
+    setUploadType(type);
+    if (type === "song") {
+      setShowSongForm(true);
+    } else {
+      setShowAlbumForm(true);
+    }
   };
 
   return (
@@ -48,245 +51,114 @@ export default function ArtistUpload() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Upload Area */}
-          <Card className="bg-spotify-gray border-spotify-light-gray">
-            <CardHeader>
-              <CardTitle className="text-white">Upload Audio Files</CardTitle>
-              <CardDescription className="text-spotify-text-gray">
-                Drag and drop your audio files or click to browse
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="border-2 border-dashed border-spotify-light-gray rounded-lg p-8 text-center hover:border-spotify-green transition-colors">
-                <Upload className="h-12 w-12 text-spotify-text-gray mx-auto mb-4" />
-                <p className="text-white mb-2">Drop your audio files here</p>
-                <p className="text-spotify-text-gray text-sm mb-4">
-                  Supports MP3, WAV, FLAC, and other audio formats
-                </p>
-                <input
-                  type="file"
-                  multiple
-                  accept="audio/*"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                  id="audio-upload"
-                />
-                <label htmlFor="audio-upload">
-                  <Button variant="spotify" asChild>
-                    <span>Choose Files</span>
-                  </Button>
-                </label>
+        {/* Upload Options */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Upload Single Song */}
+          <Card
+            className="bg-spotify-gray border-spotify-light-gray hover:border-spotify-green/50 transition-all duration-300 cursor-pointer group"
+            onClick={() => handleUploadType("song")}
+          >
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Music className="h-8 w-8 text-black" />
               </div>
-
-              {/* Uploaded Files */}
-              {uploadedFiles.length > 0 && (
-                <div className="mt-6 space-y-2">
-                  <h4 className="text-white font-medium">Uploaded Files:</h4>
-                  {uploadedFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-3 bg-spotify-light-gray rounded-lg"
-                    >
-                      <div className="flex items-center gap-3">
-                        <FileAudio className="h-5 w-5 text-spotify-green" />
-                        <div>
-                          <p className="text-white text-sm">{file.name}</p>
-                          <p className="text-spotify-text-gray text-xs">
-                            {(file.size / 1024 / 1024).toFixed(2)} MB
-                          </p>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeFile(index)}
-                        className="h-8 w-8 text-red-400 hover:text-red-300"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <h3 className="text-white text-xl font-bold mb-2 group-hover:text-gradient transition-all duration-300">
+                Upload Single Song
+              </h3>
+              <p className="text-spotify-text-gray mb-4">
+                Upload a single track with detailed metadata and cover art
+              </p>
+              <Button
+                variant="spotify"
+                className="group-hover:scale-105 transition-transform duration-300"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Upload Song
+              </Button>
             </CardContent>
           </Card>
 
-          {/* Song Information */}
-          <Card className="bg-spotify-gray border-spotify-light-gray">
-            <CardHeader>
-              <CardTitle className="text-white">Song Information</CardTitle>
-              <CardDescription className="text-spotify-text-gray">
-                Provide details about your music
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-white mb-2 block">
-                    Song Title
-                  </label>
-                  <Input
-                    value={songData.title}
-                    onChange={(e) =>
-                      setSongData((prev) => ({
-                        ...prev,
-                        title: e.target.value,
-                      }))
-                    }
-                    placeholder="Enter song title"
-                    className="bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-white mb-2 block">
-                    Album
-                  </label>
-                  <Input
-                    value={songData.album}
-                    onChange={(e) =>
-                      setSongData((prev) => ({
-                        ...prev,
-                        album: e.target.value,
-                      }))
-                    }
-                    placeholder="Enter album name"
-                    className="bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray"
-                  />
-                </div>
+          {/* Create Album */}
+          <Card
+            className="bg-spotify-gray border-spotify-light-gray hover:border-spotify-green/50 transition-all duration-300 cursor-pointer group"
+            onClick={() => handleUploadType("album")}
+          >
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Album className="h-8 w-8 text-black" />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-white mb-2 block">
-                    Genre
-                  </label>
-                  <Input
-                    value={songData.genre}
-                    onChange={(e) =>
-                      setSongData((prev) => ({
-                        ...prev,
-                        genre: e.target.value,
-                      }))
-                    }
-                    placeholder="e.g., Pop, Rock, Electronic"
-                    className="bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-white mb-2 block">
-                    Cover Art
-                  </label>
-                  <div className="border-2 border-dashed border-spotify-light-gray rounded-lg p-4 text-center hover:border-spotify-green transition-colors">
-                    <Image className="h-8 w-8 text-spotify-text-gray mx-auto mb-2" />
-                    <p className="text-spotify-text-gray text-sm">
-                      Upload cover art
-                    </p>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="cover-upload"
-                    />
-                    <label htmlFor="cover-upload">
-                      <Button
-                        variant="spotifySecondary"
-                        size="sm"
-                        className="mt-2"
-                      >
-                        Choose Image
-                      </Button>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-white mb-2 block">
-                  Description
-                </label>
-                <textarea
-                  value={songData.description}
-                  onChange={(e) =>
-                    setSongData((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  placeholder="Tell us about your song..."
-                  rows={4}
-                  className="w-full bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray rounded-md p-3 resize-none"
-                />
-              </div>
+              <h3 className="text-white text-xl font-bold mb-2 group-hover:text-gradient transition-all duration-300">
+                Create Album
+              </h3>
+              <p className="text-spotify-text-gray mb-4">
+                Create a new album and organize multiple tracks together
+              </p>
+              <Button
+                variant="spotify"
+                className="group-hover:scale-105 transition-transform duration-300"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create Album
+              </Button>
             </CardContent>
           </Card>
+        </div>
 
-          {/* Upload Options */}
-          <Card className="bg-spotify-gray border-spotify-light-gray">
-            <CardHeader>
-              <CardTitle className="text-white">Upload Options</CardTitle>
-              <CardDescription className="text-spotify-text-gray">
-                Configure your upload settings
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-white font-medium">Make Public</p>
-                    <p className="text-spotify-text-gray text-sm">
-                      Allow others to discover and play your music
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    defaultChecked
-                    className="w-4 h-4 text-spotify-green"
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-white font-medium">Allow Downloads</p>
-                    <p className="text-spotify-text-gray text-sm">
-                      Let users download your music
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-spotify-green"
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-white font-medium">Auto-approve</p>
-                    <p className="text-spotify-text-gray text-sm">
-                      Skip manual review process
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-spotify-green"
-                  />
-                </div>
+        {/* Quick Stats */}
+        <Card className="bg-spotify-gray border-spotify-light-gray">
+          <CardHeader>
+            <CardTitle className="text-white">Quick Stats</CardTitle>
+            <CardDescription className="text-spotify-text-gray">
+              Your music performance overview
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-spotify-light-gray/50 rounded-lg">
+                <Music className="h-6 w-6 text-spotify-green mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">24</p>
+                <p className="text-sm text-spotify-text-gray">Total Songs</p>
               </div>
-            </CardContent>
-          </Card>
+              <div className="text-center p-4 bg-spotify-light-gray/50 rounded-lg">
+                <Album className="h-6 w-6 text-blue-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">3</p>
+                <p className="text-sm text-spotify-text-gray">Total Albums</p>
+              </div>
+              <div className="text-center p-4 bg-spotify-light-gray/50 rounded-lg">
+                <Upload className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">1.2M</p>
+                <p className="text-sm text-spotify-text-gray">Total Plays</p>
+              </div>
+              <div className="text-center p-4 bg-spotify-light-gray/50 rounded-lg">
+                <Music className="h-6 w-6 text-orange-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">12.5K</p>
+                <p className="text-sm text-spotify-text-gray">Followers</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Submit Button */}
-          <div className="flex justify-end gap-4">
-            <Button variant="spotifySecondary" type="button">
-              Save as Draft
-            </Button>
-            <Button
-              variant="spotify"
-              type="submit"
-              disabled={uploadedFiles.length === 0}
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Music
-            </Button>
-          </div>
-        </form>
+        {/* Form Dialogs */}
+        <SongForm
+          open={showSongForm}
+          onOpenChange={setShowSongForm}
+          onSubmit={handleSongSubmit}
+          loading={false}
+          artists={[{ id: "current-artist", name: "Current Artist" }]}
+          albums={[
+            { id: "1", name: "Summer Collection" },
+            { id: "2", name: "Night Songs" },
+            { id: "3", name: "Fresh Start" },
+            { id: "4", name: "Urban Stories" },
+          ]}
+        />
+
+        <AlbumForm
+          open={showAlbumForm}
+          onOpenChange={setShowAlbumForm}
+          onSubmit={handleAlbumSubmit}
+          loading={false}
+        />
       </div>
     </MainLayout>
   );

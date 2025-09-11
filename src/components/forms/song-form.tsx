@@ -160,7 +160,7 @@ export function SongForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center">
@@ -176,171 +176,229 @@ export function SongForm({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 p-6 pt-0">
-          {/* File Uploads */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField label="Audio File" required>
-              <FormFileUpload accept="audio/*" onChange={setAudioFile}>
-                {formData.audioFile && (
-                  <div className="space-y-2">
-                    <div className="w-16 h-16 bg-spotify-light-gray rounded-lg flex items-center justify-center mx-auto">
-                      <Music className="h-8 w-8 text-spotify-green" />
+          {/* File Uploads - Compact Layout */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Upload className="h-5 w-5" />
+              File Uploads
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField label="Audio File" required>
+                <FormFileUpload accept="audio/*" onChange={setAudioFile}>
+                  {formData.audioFile ? (
+                    <div className="flex items-center gap-3 p-3 bg-spotify-light-gray/50 rounded-lg">
+                      <div className="w-12 h-12 bg-spotify-light-gray rounded-lg flex items-center justify-center">
+                        <Music className="h-6 w-6 text-spotify-green" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-white font-medium">
+                          Audio File Selected
+                        </p>
+                        <p className="text-xs text-spotify-text-gray">
+                          Click to change
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-sm text-spotify-text-gray">
-                      Audio File Selected
-                    </p>
-                  </div>
-                )}
-              </FormFileUpload>
-            </FormField>
+                  ) : (
+                    <div className="p-4 border-2 border-dashed border-spotify-light-gray rounded-lg text-center">
+                      <Music className="h-8 w-8 text-spotify-text-gray mx-auto mb-2" />
+                      <p className="text-sm text-spotify-text-gray">
+                        Click to upload audio file
+                      </p>
+                    </div>
+                  )}
+                </FormFileUpload>
+              </FormField>
 
-            <FormField label="Cover Art">
-              <FormFileUpload accept="image/*" onChange={setCoverFile}>
-                {formData.coverImage && (
-                  <div className="space-y-2">
-                    <img
-                      src={formData.coverImage}
-                      alt="Cover preview"
-                      className="w-16 h-16 object-cover rounded-lg mx-auto"
-                    />
-                    <p className="text-sm text-spotify-text-gray">
-                      Cover Art Preview
-                    </p>
-                  </div>
-                )}
-              </FormFileUpload>
-            </FormField>
-          </div>
-
-          {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Song Title" required error={errors.title}>
-              <FormInput
-                placeholder="Enter song title"
-                value={formData.title}
-                onChange={(value) => handleInputChange("title", value)}
-              />
-            </FormField>
-
-            <FormField label="Artist" required error={errors.artist}>
-              {artists.length > 0 ? (
-                <FormSelect
-                  value={formData.artist}
-                  onChange={(value) => handleInputChange("artist", value)}
-                  options={artistOptions}
-                  placeholder="Select artist"
-                />
-              ) : (
-                <FormInput
-                  placeholder="Enter artist name"
-                  value={formData.artist}
-                  onChange={(value) => handleInputChange("artist", value)}
-                />
-              )}
-            </FormField>
-
-            <FormField label="Album">
-              {albums.length > 0 ? (
-                <FormSelect
-                  value={formData.album || ""}
-                  onChange={(value) => handleInputChange("album", value)}
-                  options={albumOptions}
-                  placeholder="Select album (optional)"
-                />
-              ) : (
-                <FormInput
-                  placeholder="Enter album name (optional)"
-                  value={formData.album || ""}
-                  onChange={(value) => handleInputChange("album", value)}
-                />
-              )}
-            </FormField>
-
-            <FormField label="Genre" required error={errors.genre}>
-              <FormSelect
-                value={formData.genre}
-                onChange={(value) => handleInputChange("genre", value)}
-                options={genreOptions}
-                placeholder="Select genre"
-              />
-            </FormField>
-
-            <FormField label="Duration" required error={errors.duration}>
-              <FormInput
-                placeholder="MM:SS (e.g., 3:45)"
-                value={formData.duration}
-                onChange={(value) => handleInputChange("duration", value)}
-              />
-            </FormField>
-
-            <FormField label="Release Date">
-              <input
-                type="date"
-                value={formData.releaseDate || ""}
-                onChange={(e) =>
-                  handleInputChange("releaseDate", e.target.value)
-                }
-                className="flex w-full rounded-md border border-spotify-light-gray bg-spotify-light-gray px-3 py-2 text-sm text-white focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </FormField>
-          </div>
-
-          {/* Description and Lyrics */}
-          <FormField label="Description">
-            <FormTextarea
-              placeholder="Describe the song, its inspiration, or any special notes..."
-              value={formData.description || ""}
-              onChange={(value) => handleInputChange("description", value)}
-              rows={3}
-            />
-          </FormField>
-
-          <FormField label="Lyrics">
-            <FormTextarea
-              placeholder="Enter song lyrics (optional)"
-              value={formData.lyrics || ""}
-              onChange={(value) => handleInputChange("lyrics", value)}
-              rows={6}
-            />
-          </FormField>
-
-          {/* Tags */}
-          <FormField label="Tags">
-            <FormInput
-              placeholder="Enter tags separated by commas (e.g., upbeat, summer, party)"
-              value={formData.tags || ""}
-              onChange={(value) => handleInputChange("tags", value)}
-            />
-          </FormField>
-
-          {/* Status */}
-          <FormField label="Status" required>
-            <FormSelect
-              value={formData.status}
-              onChange={(value) =>
-                handleInputChange(
-                  "status",
-                  value as "draft" | "pending" | "approved" | "rejected"
-                )
-              }
-              options={statusOptions}
-              placeholder="Select status"
-            />
-          </FormField>
-
-          {/* Song Preview (if editing) */}
-          {initialData?.id && formData.audioFile && (
-            <div className="p-4 bg-spotify-light-gray rounded-lg">
-              <h4 className="text-sm font-medium text-white mb-2">
-                Audio Preview
-              </h4>
-              <audio controls className="w-full">
-                <source src={formData.audioFile} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
+              <FormField label="Cover Art">
+                <FormFileUpload accept="image/*" onChange={setCoverFile}>
+                  {formData.coverImage ? (
+                    <div className="flex items-center gap-3 p-3 bg-spotify-light-gray/50 rounded-lg">
+                      <img
+                        src={formData.coverImage}
+                        alt="Cover preview"
+                        className="w-12 h-12 object-cover rounded-lg"
+                      />
+                      <div>
+                        <p className="text-sm text-white font-medium">
+                          Cover Art Selected
+                        </p>
+                        <p className="text-xs text-spotify-text-gray">
+                          Click to change
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-4 border-2 border-dashed border-spotify-light-gray rounded-lg text-center">
+                      <Album className="h-8 w-8 text-spotify-text-gray mx-auto mb-2" />
+                      <p className="text-sm text-spotify-text-gray">
+                        Click to upload cover art
+                      </p>
+                    </div>
+                  )}
+                </FormFileUpload>
+              </FormField>
             </div>
-          )}
+          </div>
 
-          <DialogFooter>
+          {/* Basic Information - 3 columns for better space usage */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Music className="h-5 w-5" />
+              Song Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField label="Song Title" required error={errors.title}>
+                <FormInput
+                  placeholder="Enter song title"
+                  value={formData.title}
+                  onChange={(value) => handleInputChange("title", value)}
+                />
+              </FormField>
+
+              <FormField label="Artist" required error={errors.artist}>
+                {artists.length > 0 ? (
+                  <FormSelect
+                    value={formData.artist}
+                    onChange={(value) => handleInputChange("artist", value)}
+                    options={artistOptions}
+                    placeholder="Select artist"
+                  />
+                ) : (
+                  <FormInput
+                    placeholder="Enter artist name"
+                    value={formData.artist}
+                    onChange={(value) => handleInputChange("artist", value)}
+                  />
+                )}
+              </FormField>
+
+              <FormField label="Genre" required error={errors.genre}>
+                <FormSelect
+                  value={formData.genre}
+                  onChange={(value) => handleInputChange("genre", value)}
+                  options={genreOptions}
+                  placeholder="Select genre"
+                />
+              </FormField>
+
+              <FormField label="Album">
+                {albums.length > 0 ? (
+                  <FormSelect
+                    value={formData.album || ""}
+                    onChange={(value) => handleInputChange("album", value)}
+                    options={albumOptions}
+                    placeholder="Select album (optional)"
+                  />
+                ) : (
+                  <FormInput
+                    placeholder="Enter album name (optional)"
+                    value={formData.album || ""}
+                    onChange={(value) => handleInputChange("album", value)}
+                  />
+                )}
+              </FormField>
+
+              <FormField label="Duration" required error={errors.duration}>
+                <FormInput
+                  placeholder="MM:SS (e.g., 3:45)"
+                  value={formData.duration}
+                  onChange={(value) => handleInputChange("duration", value)}
+                />
+              </FormField>
+
+              <FormField label="Release Date">
+                <input
+                  type="date"
+                  value={formData.releaseDate || ""}
+                  onChange={(e) =>
+                    handleInputChange("releaseDate", e.target.value)
+                  }
+                  className="flex w-full rounded-md border border-spotify-light-gray bg-spotify-light-gray px-3 py-2 text-sm text-white focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </FormField>
+            </div>
+          </div>
+
+          {/* Additional Information - Side by side */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Additional Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField label="Description">
+                <FormTextarea
+                  placeholder="Describe the song, its inspiration..."
+                  value={formData.description || ""}
+                  onChange={(value) => handleInputChange("description", value)}
+                  rows={3}
+                />
+              </FormField>
+
+              <FormField label="Tags">
+                <FormInput
+                  placeholder="upbeat, summer, party"
+                  value={formData.tags || ""}
+                  onChange={(value) => handleInputChange("tags", value)}
+                />
+              </FormField>
+            </div>
+          </div>
+
+          {/* Lyrics - Collapsible section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Music className="h-5 w-5" />
+              Lyrics (Optional)
+            </h3>
+            <FormField label="Song Lyrics">
+              <FormTextarea
+                placeholder="Enter song lyrics (optional)"
+                value={formData.lyrics || ""}
+                onChange={(value) => handleInputChange("lyrics", value)}
+                rows={4}
+              />
+            </FormField>
+          </div>
+
+          {/* Status and Preview */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Status & Preview
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField label="Status" required>
+                <FormSelect
+                  value={formData.status}
+                  onChange={(value) =>
+                    handleInputChange(
+                      "status",
+                      value as "draft" | "pending" | "approved" | "rejected"
+                    )
+                  }
+                  options={statusOptions}
+                  placeholder="Select status"
+                />
+              </FormField>
+
+              {/* Song Preview (if editing) */}
+              {initialData?.id && formData.audioFile && (
+                <div className="p-4 bg-spotify-light-gray rounded-lg">
+                  <h4 className="text-sm font-medium text-white mb-2">
+                    Audio Preview
+                  </h4>
+                  <audio controls className="w-full">
+                    <source src={formData.audioFile} type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter className="sticky bottom-0 bg-spotify-gray border-t border-spotify-light-gray pt-4">
             <Button
               type="button"
               variant="ghost"

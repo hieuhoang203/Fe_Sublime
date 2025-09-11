@@ -106,13 +106,17 @@ export default function ArtistDashboard() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="spotifySecondary" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Upload Song
+            <Button variant="spotifySecondary" size="sm" asChild>
+              <a href="/artist/upload">
+                <Download className="h-4 w-4 mr-2" />
+                Upload Music
+              </a>
             </Button>
-            <Button variant="spotify" size="sm">
-              <Music className="h-4 w-4 mr-2" />
-              Create Album
+            <Button variant="spotify" size="sm" asChild>
+              <a href="/artist/songs">
+                <Music className="h-4 w-4 mr-2" />
+                Manage Songs
+              </a>
             </Button>
           </div>
         </div>
@@ -248,32 +252,44 @@ export default function ArtistDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
+              <a
+                href="/artist/upload"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
                 <Music className="h-6 w-6 text-green-400 mb-2" />
-                <p className="text-sm font-medium text-white">Upload Song</p>
+                <p className="text-sm font-medium text-white">Upload Music</p>
                 <p className="text-xs text-spotify-text-gray">Add new music</p>
-              </button>
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
-                <Album className="h-6 w-6 text-blue-400 mb-2" />
-                <p className="text-sm font-medium text-white">Create Album</p>
+              </a>
+              <a
+                href="/artist/songs"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
+                <Music className="h-6 w-6 text-blue-400 mb-2" />
+                <p className="text-sm font-medium text-white">Manage Songs</p>
+                <p className="text-xs text-spotify-text-gray">
+                  Edit your tracks
+                </p>
+              </a>
+              <a
+                href="/artist/albums"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
+                <Album className="h-6 w-6 text-purple-400 mb-2" />
+                <p className="text-sm font-medium text-white">Manage Albums</p>
                 <p className="text-xs text-spotify-text-gray">
                   Organize your songs
                 </p>
-              </button>
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
-                <TrendingUp className="h-6 w-6 text-purple-400 mb-2" />
+              </a>
+              <a
+                href="/artist/analytics"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
+                <TrendingUp className="h-6 w-6 text-orange-400 mb-2" />
                 <p className="text-sm font-medium text-white">View Analytics</p>
                 <p className="text-xs text-spotify-text-gray">
                   Track performance
                 </p>
-              </button>
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
-                <Users className="h-6 w-6 text-orange-400 mb-2" />
-                <p className="text-sm font-medium text-white">Manage Profile</p>
-                <p className="text-xs text-spotify-text-gray">
-                  Update information
-                </p>
-              </button>
+              </a>
             </div>
           </CardContent>
         </Card>

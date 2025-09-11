@@ -105,13 +105,17 @@ export default function UserDashboard() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="spotifySecondary" size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Playlist
+            <Button variant="spotifySecondary" size="sm" asChild>
+              <a href="/user/playlists">
+                <Plus className="h-4 w-4 mr-2" />
+                My Playlists
+              </a>
             </Button>
-            <Button variant="spotify" size="sm">
-              <Music className="h-4 w-4 mr-2" />
-              Browse Music
+            <Button variant="spotify" size="sm" asChild>
+              <a href="/user/liked">
+                <Heart className="h-4 w-4 mr-2" />
+                Liked Songs
+              </a>
             </Button>
           </div>
         </div>
@@ -255,32 +259,42 @@ export default function UserDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
+              <a
+                href="/user/liked"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
                 <Heart className="h-6 w-6 text-red-400 mb-2" />
                 <p className="text-sm font-medium text-white">Liked Songs</p>
                 <p className="text-xs text-spotify-text-gray">156 songs</p>
-              </button>
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
+              </a>
+              <a
+                href="/user/playlists"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
                 <Album className="h-6 w-6 text-blue-400 mb-2" />
                 <p className="text-sm font-medium text-white">My Playlists</p>
                 <p className="text-xs text-spotify-text-gray">12 playlists</p>
-              </button>
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
+              </a>
+              <a
+                href="/user/library"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
                 <Clock className="h-6 w-6 text-green-400 mb-2" />
-                <p className="text-sm font-medium text-white">
-                  Recently Played
-                </p>
+                <p className="text-sm font-medium text-white">My Library</p>
                 <p className="text-xs text-spotify-text-gray">
-                  Continue listening
+                  Your music collection
                 </p>
-              </button>
-              <button className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left">
+              </a>
+              <a
+                href="/user/search"
+                className="p-4 bg-spotify-light-gray hover:bg-spotify-hover rounded-lg transition-colors text-left block"
+              >
                 <Music className="h-6 w-6 text-purple-400 mb-2" />
-                <p className="text-sm font-medium text-white">Browse Music</p>
+                <p className="text-sm font-medium text-white">Search Music</p>
                 <p className="text-xs text-spotify-text-gray">
                   Discover new songs
                 </p>
-              </button>
+              </a>
             </div>
           </CardContent>
         </Card>
