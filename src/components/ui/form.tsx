@@ -88,7 +88,7 @@ const FormInput = ({
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       className={cn(
-        "bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20",
+        "bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray focus:border focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none",
         className
       )}
     />
@@ -111,7 +111,7 @@ const FormTextarea = ({
       rows={rows}
       disabled={disabled}
       className={cn(
-        "flex w-full rounded-md border border-spotify-light-gray bg-spotify-light-gray px-3 py-2 text-sm text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none",
+        "flex w-full rounded-md border border-transparent bg-spotify-light-gray px-3 py-2 text-sm text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none",
         className
       )}
     />
@@ -132,7 +132,7 @@ const FormSelect = ({
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       className={cn(
-        "flex w-full rounded-md border border-spotify-light-gray bg-spotify-light-gray px-3 py-2 text-sm text-white focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "flex w-full rounded-md border-0 bg-spotify-light-gray px-3 py-2 text-sm text-white placeholder:text-spotify-text-gray focus:border focus:border-spotify-green focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
     >

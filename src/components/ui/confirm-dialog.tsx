@@ -107,23 +107,28 @@ export function ConfirmDialog({
       <DialogContent className="sm:max-w-md animate-dialog-slide-in relative overflow-hidden group">
         {/* Background gradient effect */}
         <div className="absolute inset-0 bg-gradient-to-br from-spotify-gray/50 via-spotify-light-gray/30 to-spotify-gray/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        
+
         {/* Border glow effect */}
         <div className="absolute inset-0 rounded-lg border border-spotify-green/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <DialogHeader className="text-center relative z-10">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-spotify-gray to-spotify-light-gray animate-icon-bounce relative group">
             {/* Pulse effect for icon container */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-spotify-gray to-spotify-light-gray animate-pulse-slow opacity-50"></div>
-            
+
             <div
               className={cn(
                 "flex h-12 w-12 items-center justify-center rounded-full relative z-10 group-hover:scale-110 transition-transform duration-300",
                 config.iconBg
               )}
             >
-              <Icon className={cn("h-6 w-6 group-hover:scale-110 transition-transform duration-300", config.iconColor)} />
+              <Icon
+                className={cn(
+                  "h-6 w-6 group-hover:scale-110 transition-transform duration-300",
+                  config.iconColor
+                )}
+              />
             </div>
-            
+
             {/* Glow effect based on variant */}
             {variant === "destructive" && (
               <div className="absolute inset-0 rounded-full bg-red-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md"></div>
@@ -158,10 +163,10 @@ export function ConfirmDialog({
           >
             {/* Cancel button background */}
             <div className="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-gray-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"></div>
-            
+
             {/* Cancel button border glow */}
             <div className="absolute inset-0 border border-white/30 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"></div>
-            
+
             <span className="relative z-10 text-white font-semibold group-hover:text-white transition-colors duration-200 ease-out">
               {cancelText || config.cancelText}
             </span>
@@ -179,19 +184,19 @@ export function ConfirmDialog({
             {variant === "destructive" && (
               <div className="absolute inset-0 rounded-md bg-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out blur-sm"></div>
             )}
-            
+
             {variant === "warning" && (
               <div className="absolute inset-0 rounded-md bg-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out blur-sm"></div>
             )}
-            
+
             {variant === "success" && (
               <div className="absolute inset-0 rounded-md bg-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out blur-sm"></div>
             )}
-            
+
             {(variant === "default" || variant === "info") && (
               <div className="absolute inset-0 rounded-md bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out blur-sm"></div>
             )}
-            
+
             <span className="relative z-10 text-white font-bold">
               {loading ? (
                 <div className="flex items-center gap-2 text-white">
@@ -235,7 +240,22 @@ export function useConfirmDialog() {
   );
 
   const ConfirmDialogComponent = React.useMemo(() => {
-    return <ConfirmDialog open={open} onOpenChange={setOpen} {...config} />;
+    if (!config) return null;
+    return (
+      <ConfirmDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={config.title || "Confirm"}
+        description={config.description}
+        confirmText={config.confirmText}
+        cancelText={config.cancelText}
+        variant={config.variant}
+        loading={config.loading}
+        disabled={config.disabled}
+        onConfirm={config.onConfirm || (() => {})}
+        onCancel={config.onCancel}
+      />
+    );
   }, [open, config]);
 
   return {

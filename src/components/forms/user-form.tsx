@@ -18,7 +18,7 @@ import {
   FormSubmit,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { User, Mail, Phone, Calendar, MapPin, Shield } from "lucide-react";
 
 interface UserFormData {
@@ -143,11 +143,12 @@ export function UserForm({
         <form onSubmit={handleSubmit} className="space-y-6 p-6 pt-0">
           {/* Avatar Section */}
           <div className="flex items-center gap-6">
-            <Avatar
-              src={formData.avatar}
-              fallback={formData.name.charAt(0).toUpperCase() || "U"}
-              size="xl"
-            />
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={formData.avatar} alt={formData.name} />
+              <AvatarFallback>
+                {formData.name.charAt(0).toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
             <div className="flex-1">
               <FormField label="Profile Picture">
                 <FormFileUpload

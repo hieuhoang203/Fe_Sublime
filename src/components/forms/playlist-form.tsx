@@ -215,7 +215,7 @@ export function PlaylistForm({
                   onChange={(e) =>
                     handleInputChange("isPublic", e.target.checked)
                   }
-                  className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2"
+                  className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2 focus:ring-spotify-green/20"
                 />
               </div>
 
@@ -235,7 +235,7 @@ export function PlaylistForm({
                   onChange={(e) =>
                     handleInputChange("isCollaborative", e.target.checked)
                   }
-                  className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2"
+                  className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2 focus:ring-spotify-green/20"
                 />
               </div>
             </div>
