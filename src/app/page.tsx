@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 import {
   Users,
   Mic,
@@ -90,12 +91,7 @@ export default function Home() {
       <div className="bg-spotify-gray/30 backdrop-blur-md border-b border-spotify-light-gray/50 shadow-2xl">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between animate-fade-in-up">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg hover:shadow-spotify-green/30 transition-all duration-300 hover:scale-110">
-                <span className="text-black font-bold text-lg">S</span>
-              </div>
-              <h1 className="text-3xl font-bold text-gradient">Sublime</h1>
-            </div>
+            <Logo size="lg" showText={true} />
             <div className="text-spotify-text-gray text-lg font-medium">
               Choose your role to continue
             </div>

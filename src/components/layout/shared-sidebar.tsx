@@ -4,6 +4,7 @@ import { OptimizedLink } from "./optimized-link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/logo";
 import {
   Tooltip,
   TooltipContent,
@@ -134,26 +135,7 @@ export function SharedSidebar({ userType }: SidebarProps) {
       >
         {/* Logo */}
         <div className={cn("animate-fade-in-up", isCollapsed ? "p-3" : "p-6")}>
-          <div className="flex items-center gap-3">
-            <div
-              className={cn(
-                "bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg transition-all duration-300",
-                isCollapsed ? "w-12 h-12" : "w-8 h-8"
-              )}
-            >
-              <span
-                className={cn(
-                  "text-black font-bold",
-                  isCollapsed ? "text-lg" : "text-sm"
-                )}
-              >
-                S
-              </span>
-            </div>
-            {!isCollapsed && (
-              <h1 className="text-2xl font-bold text-gradient">Sublime</h1>
-            )}
-          </div>
+          <Logo size={isCollapsed ? "xl" : "md"} showText={!isCollapsed} />
         </div>
 
         {/* Navigation */}

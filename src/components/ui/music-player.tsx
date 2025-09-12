@@ -58,7 +58,7 @@ export function MusicPlayer({
     album: "Sample Album",
     duration: 180, // 3 minutes
     coverUrl: "",
-    isLiked: false,
+    isLiked: true,
   },
   isPlaying = false,
   volume = 70,
@@ -173,7 +173,7 @@ export function MusicPlayer({
             variant="ghost"
             size="icon"
             onClick={onLikeToggle}
-            className="h-8 w-8 text-spotify-text-gray hover:text-white hover:bg-white/10 transition-all duration-200"
+            className="h-8 w-8 text-spotify-text-gray hover:text-white hover:bg-white/10 transition-all duration-200 self-start"
           >
             <Heart
               className={cn(
@@ -281,6 +281,25 @@ export function MusicPlayer({
 
         {/* Right Section - Volume & Additional Controls */}
         <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onLikeToggle}
+            className={cn(
+              "h-8 w-8 hover:bg-white/10 transition-all duration-200",
+              currentSong?.isLiked
+                ? "text-spotify-green hover:text-spotify-green-hover"
+                : "text-spotify-text-gray hover:text-white"
+            )}
+          >
+            <Heart
+              className={cn(
+                "h-4 w-4",
+                currentSong?.isLiked ? "fill-current" : ""
+              )}
+            />
+          </Button>
+
           <Button
             variant="ghost"
             size="icon"

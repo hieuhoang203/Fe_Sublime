@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/logo";
 import {
   Home,
   Search,
@@ -72,12 +73,7 @@ export function Sidebar({ userType }: SidebarProps) {
     <div className="w-64 bg-gradient-to-b from-spotify-black via-spotify-gray to-spotify-black h-full flex flex-col shadow-2xl">
       {/* Logo */}
       <div className="p-6 animate-fade-in-up">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg">
-            <span className="text-black font-bold text-sm">S</span>
-          </div>
-          <h1 className="text-2xl font-bold text-gradient">Sublime</h1>
-        </div>
+        <Logo size="md" showText={true} />
       </div>
 
       {/* Navigation */}

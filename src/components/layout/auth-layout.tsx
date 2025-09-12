@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { Music, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -53,13 +54,12 @@ export function AuthLayout({
       <div className="relative z-10 p-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg group-hover:shadow-spotify-green/30 transition-all duration-300 group-hover:scale-110">
-              <Music className="h-5 w-5 text-black" />
-            </div>
-            <span className="text-2xl font-bold text-white group-hover:text-gradient transition-all duration-300">
-              Sublime
-            </span>
+          <Link href="/" className="group">
+            <Logo
+              size="lg"
+              showText={true}
+              className="group-hover:scale-105 transition-transform duration-300"
+            />
           </Link>
 
           {/* Back Button */}
