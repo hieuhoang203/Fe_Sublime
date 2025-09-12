@@ -1,98 +1,98 @@
-import { API_CONFIG, STORAGE_KEYS } from "@/constant";
-import { handleError, retry } from "@/constant/helpers";
-import axios from "axios";
-import axiosRetry from "axios-retry";
+import axiosHelper from "./api.config";
 
-const axiosHelper = () => {
-  const instance = axios.create({
-    baseURL: API_CONFIG.BASE_URL,
-    timeout: API_CONFIG.TIMEOUT,
+const config = {
     headers: {
-      "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
     },
-    withCredentials: true,
-  });
-
-  axiosRetry(instance, {
-    retries: API_CONFIG.RETRY_ATTEMPTS,
-    retryDelay: () => 1000,
-    retryCondition: (error) => error.response?.status === 401,
-  });
-
-  return instance;
 };
 
-// Request interceptor
-axiosHelper().interceptors.request.use(
-    (config) => {
-        // Add auth token to requests
-        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        
-        // Add timestamp to prevent caching
-        if (config.method === 'get') {
-            config.params = {
-                ...config.params,
-                _t: Date.now(),
-            };
-        }
-        
-        return config;
+const apiPath = {
+    AUTH: {
+        login: "/api/auth/login",
+        register: "/api/auth/register",
+        logout: "/auth/logout",
     },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
-
-// Response interceptor
-axiosHelper().interceptors.response.use(
-    (response) => {
-        return response;
+    SONG: {
+        create: "/api/song/create",
+        update: "/api/song/update",
+        delete: "/api/song/delete",
+        get: "/api/song/get",
+        getAll: "/api/song/getAll",
     },
-    async (error) => {
-        const originalRequest = error.config as any;
-        
-        // Handle 401 errors (unauthorized)
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-            
-            // Clear stored auth data
-            localStorage.removeItem(STORAGE_KEYS.ACCOUNT);
-            localStorage.removeItem(STORAGE_KEYS.TOKEN);
-            
-            // Redirect to login (handled by AxiosInterceptor component)
-            return Promise.reject(error);
-        }
-        
-        // Handle network errors with retry
-        if (!error.response && error.code === 'ECONNABORTED') {
-            if (originalRequest._retryCount < API_CONFIG.RETRY_ATTEMPTS) {
-                originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
-                
-                try {
-                    return await retry(() => axiosHelper().request(originalRequest));
-                } catch (retryError) {
-                    return Promise.reject(retryError);
-                }
-            }
-        }
-        
-        return Promise.reject(error);
-    }
-);
-
-// Enhanced error handling
-export const apiRequest = async (config: any) => {
-    try {
-        const response = await axiosHelper().request(config);
-        return response;
-    } catch (error) {
-        const errorMessage = handleError(error as any);
-        throw new Error(errorMessage);
-    }
+    USER: {
+        create: "/api/user/create",
+        update: "/api/user/update",
+        delete: "/api/user/delete",
+        get: "/api/user/get",
+        getAll: "/api/user/getAll",
+    },
+    ALBUM: {
+        create: "/api/album/create",
+        update: "/api/album/update",
+        delete: "/api/album/delete",
+        get: "/api/album/get",
+        getAll: "/api/album/getAll",
+    },
+    ARTIST: {
+        create: "/api/artist/create",
+        update: "/api/artist/update",
+        delete: "/api/artist/delete",
+        get: "/api/artist/get",
+        getAll: "/api/artist/getAll",
+    },
+    GENRE: {
+        create: "/api/genre/create",
+        update: "/api/genre/update",
+        delete: "/api/genre/delete",
+        get: "/api/genre/get",
+        getAll: "/api/genre/getAll",
+    },
+    PLAYLIST: {
+        create: "/api/playlist/create",
+        update: "/api/playlist/update",
+        delete: "/api/playlist/delete",
+        get: "/api/playlist/get",
+        getAll: "/api/playlist/getAll",
+    },
+    PLAYLIST_SONG: {
+        create: "/api/playlistSong/create",
+        update: "/api/playlistSong/update",
+        delete: "/api/playlistSong/delete",
+        get: "/api/playlistSong/get",
+        getAll: "/api/playlistSong/getAll",
+    },
 };
 
-export default axiosHelper;
+const AUTH = {}
+
+const SONG = {}
+
+const USER = {}
+
+const ALBUM = {}
+
+const ARTIST = {}
+
+const GENRE = {
+    create: async (data: any) => {
+        return await axiosHelper().post(apiPath.GENRE.create, data);
+    },
+    update: async (id: string, data: any) => {
+        return await axiosHelper().put(`${apiPath.GENRE.update}/${id}`, data);
+    },
+    delete: async (id: string) => {
+        return await axiosHelper().delete(`${apiPath.GENRE.delete}/${id}`);
+    },
+    get: async (id: string) => {
+        return await axiosHelper().get(`${apiPath.GENRE.get}/${id}`);
+    },
+    getAll: async () => {
+        return await axiosHelper().get(apiPath.GENRE.getAll);
+    },
+}
+
+const PLAYLIST = {}
+
+const PLAYLIST_SONG = {}
+
+export const AXIOS_API = { AUTH, SONG, USER, ALBUM, ARTIST, GENRE, PLAYLIST, PLAYLIST_SONG };

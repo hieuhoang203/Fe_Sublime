@@ -27,6 +27,7 @@ import {
   Download,
   Upload,
   TrendingUp,
+  Tag,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -49,6 +50,7 @@ const getNavItems = (userType: "admin" | "artist" | "user"): NavItem[] => {
         { name: "Artists", href: "/admin/artists", icon: Mic },
         { name: "Songs", href: "/admin/songs", icon: Music },
         { name: "Albums", href: "/admin/albums", icon: Album },
+        { name: "Genres", href: "/admin/genres", icon: Tag },
         { name: "Settings", href: "/admin/settings", icon: Settings },
       ];
     case "artist":

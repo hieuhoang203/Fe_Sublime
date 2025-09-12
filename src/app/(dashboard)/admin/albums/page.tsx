@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { AlbumForm } from "@/components/forms/album-form";
+import { AlbumFilter } from "@/components/ui/album-filter";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Album,
@@ -38,6 +39,10 @@ export default function AdminAlbums() {
   const [statusFilter, setStatusFilter] = useState<
     "all" | "draft" | "published" | "archived"
   >("all");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<Record<string, string>>(
+    {}
+  );
   const { confirm, ConfirmDialog } = useConfirmDialog();
 
   const albums = [
@@ -123,11 +128,43 @@ export default function AdminAlbums() {
   ];
 
   const filteredAlbums = albums.filter((album) => {
+    // Existing search and status filters
     const matchesSearch =
       album.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       album.artist.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
       statusFilter === "all" || album.status === statusFilter;
+
+    // Applied filters from filter modal
+    if (
+      appliedFilters.search &&
+      !album.title
+        .toLowerCase()
+        .includes(appliedFilters.search.toLowerCase()) &&
+      !album.artist.toLowerCase().includes(appliedFilters.search.toLowerCase())
+    ) {
+      return false;
+    }
+
+    if (appliedFilters.status && album.status !== appliedFilters.status) {
+      return false;
+    }
+
+    if (appliedFilters.artist && album.artist !== appliedFilters.artist) {
+      return false;
+    }
+
+    if (
+      appliedFilters.dateFrom &&
+      album.releaseDate < appliedFilters.dateFrom
+    ) {
+      return false;
+    }
+
+    if (appliedFilters.dateTo && album.releaseDate > appliedFilters.dateTo) {
+      return false;
+    }
+
     return matchesSearch && matchesStatus;
   });
 
@@ -173,6 +210,14 @@ export default function AdminAlbums() {
     }
   };
 
+  const handleApplyFilters = (filters: Record<string, string>) => {
+    setAppliedFilters(filters);
+  };
+
+  const handleClearFilters = () => {
+    setAppliedFilters({});
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "published":
@@ -180,9 +225,9 @@ export default function AdminAlbums() {
       case "draft":
         return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       case "archived":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "bg-gray-500/20 text-gray-400 border-spotify-light-gray/30";
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "bg-gray-500/20 text-gray-400 border-spotify-light-gray/30";
     }
   };
 
@@ -215,7 +260,7 @@ export default function AdminAlbums() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="bg-spotify-card border-spotify-border">
+        <Card className="bg-spotify-gray border-spotify-light-gray">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -231,7 +276,7 @@ export default function AdminAlbums() {
           </CardContent>
         </Card>
 
-        <Card className="bg-spotify-card border-spotify-border">
+        <Card className="bg-spotify-gray border-spotify-light-gray">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -249,7 +294,7 @@ export default function AdminAlbums() {
           </CardContent>
         </Card>
 
-        <Card className="bg-spotify-card border-spotify-border">
+        <Card className="bg-spotify-gray border-spotify-light-gray">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -267,7 +312,7 @@ export default function AdminAlbums() {
           </CardContent>
         </Card>
 
-        <Card className="bg-spotify-card border-spotify-border">
+        <Card className="bg-spotify-gray border-spotify-light-gray">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -289,7 +334,7 @@ export default function AdminAlbums() {
       </div>
 
       {/* Filters and Search */}
-      <Card className="bg-spotify-card border-spotify-border">
+      <Card className="bg-spotify-gray border-spotify-light-gray">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
@@ -316,7 +361,7 @@ export default function AdminAlbums() {
                         | "archived"
                     )
                   }
-                  className="enhanced-select"
+                  className="bg-spotify-light-gray border border-spotify-light-gray text-white focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 rounded-md px-3 py-2"
                 >
                   <option
                     value="all"
@@ -347,7 +392,8 @@ export default function AdminAlbums() {
               <Button
                 variant="outline"
                 size="sm"
-                className="border-spotify-border text-spotify-text-gray hover:bg-spotify-hover hover:text-white"
+                className="border-spotify-light-gray text-spotify-text-gray hover:bg-spotify-hover hover:text-white"
+                onClick={() => setFilterOpen(true)}
               >
                 <Filter className="h-4 w-4 mr-2" />
                 More Filters
@@ -358,7 +404,7 @@ export default function AdminAlbums() {
       </Card>
 
       {/* Albums Table */}
-      <Card className="bg-spotify-card border-spotify-border">
+      <Card className="bg-spotify-gray border-spotify-light-gray">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -385,7 +431,7 @@ export default function AdminAlbums() {
             {filteredAlbums.map((album) => (
               <div
                 key={album.id}
-                className="flex items-center justify-between p-4 bg-spotify-hover/50 rounded-lg border border-spotify-border/50 hover:bg-spotify-hover transition-colors"
+                className="flex items-center justify-between p-4 bg-spotify-gray rounded-lg border border-spotify-light-gray hover:bg-spotify-hover transition-colors"
               >
                 <div className="flex items-center space-x-4">
                   <Avatar className="h-12 w-12">
@@ -473,6 +519,15 @@ export default function AdminAlbums() {
         onSubmit={handleAlbumSubmit}
         initialData={editingAlbum}
         loading={loading}
+      />
+
+      {/* Album Filter */}
+      <AlbumFilter
+        isOpen={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
+        appliedFilters={appliedFilters}
       />
 
       {/* Confirm Dialog */}

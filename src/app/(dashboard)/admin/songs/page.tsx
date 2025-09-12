@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SongForm } from "@/components/forms/song-form";
+import { SongFilter } from "@/components/ui/song-filter";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
@@ -37,6 +38,8 @@ export default function AdminSongs() {
   const [songFormOpen, setSongFormOpen] = useState(false);
   const [editingSong, setEditingSong] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<any>({});
   const { confirm, ConfirmDialog } = useConfirmDialog();
   const { openDrawer } = useSongDrawer();
 
@@ -200,8 +203,55 @@ export default function AdminSongs() {
   ];
 
   const filteredSongs = songs.filter((song) => {
-    if (activeTab === "all") return true;
-    return song.status.toLowerCase() === activeTab;
+    // Tab filter
+    if (activeTab !== "all" && song.status.toLowerCase() !== activeTab) {
+      return false;
+    }
+
+    // Applied filters
+    if (
+      appliedFilters.search &&
+      !song.title.toLowerCase().includes(appliedFilters.search.toLowerCase()) &&
+      !song.artist.toLowerCase().includes(appliedFilters.search.toLowerCase())
+    ) {
+      return false;
+    }
+
+    if (appliedFilters.status && song.status !== appliedFilters.status) {
+      return false;
+    }
+
+    if (appliedFilters.genre && song.genre !== appliedFilters.genre) {
+      return false;
+    }
+
+    if (appliedFilters.artist && song.artist !== appliedFilters.artist) {
+      return false;
+    }
+
+    if (appliedFilters.dateFrom && song.uploadDate < appliedFilters.dateFrom) {
+      return false;
+    }
+
+    if (appliedFilters.dateTo && song.uploadDate > appliedFilters.dateTo) {
+      return false;
+    }
+
+    if (
+      appliedFilters.minPlays &&
+      song.plays < parseInt(appliedFilters.minPlays)
+    ) {
+      return false;
+    }
+
+    if (
+      appliedFilters.maxPlays &&
+      song.plays > parseInt(appliedFilters.maxPlays)
+    ) {
+      return false;
+    }
+
+    return true;
   });
 
   const handleApprove = (songId: string) => {
@@ -210,6 +260,14 @@ export default function AdminSongs() {
 
   const handleReject = (songId: string) => {
     console.log("Rejecting song:", songId);
+  };
+
+  const handleApplyFilters = (filters: Record<string, string>) => {
+    setAppliedFilters(filters);
+  };
+
+  const handleClearFilters = () => {
+    setAppliedFilters({});
   };
 
   return (
@@ -223,7 +281,11 @@ export default function AdminSongs() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="spotifySecondary" size="sm">
+          <Button
+            variant="spotifySecondary"
+            size="sm"
+            onClick={() => setFilterOpen(true)}
+          >
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
@@ -472,6 +534,15 @@ export default function AdminSongs() {
           { id: "3", name: "Mike Johnson" },
           { id: "4", name: "Sarah Wilson" },
         ]}
+      />
+
+      {/* Song Filter */}
+      <SongFilter
+        isOpen={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
+        appliedFilters={appliedFilters}
       />
 
       {/* Confirm Dialog */}

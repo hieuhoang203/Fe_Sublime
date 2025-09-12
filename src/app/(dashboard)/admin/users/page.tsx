@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { UserForm } from "@/components/forms/user-form";
+import { UserFilter } from "@/components/ui/user-filter";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Users,
@@ -28,6 +29,10 @@ export default function AdminUsers() {
   const [userFormOpen, setUserFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<Record<string, string>>(
+    {}
+  );
   const { confirm, ConfirmDialog } = useConfirmDialog();
 
   const users = [
@@ -92,6 +97,35 @@ export default function AdminUsers() {
     },
   ];
 
+  const filteredUsers = users.filter((user) => {
+    // Applied filters
+    if (
+      appliedFilters.search &&
+      !user.name.toLowerCase().includes(appliedFilters.search.toLowerCase()) &&
+      !user.email.toLowerCase().includes(appliedFilters.search.toLowerCase())
+    ) {
+      return false;
+    }
+
+    if (appliedFilters.status && user.status !== appliedFilters.status) {
+      return false;
+    }
+
+    if (appliedFilters.role && user.role !== appliedFilters.role) {
+      return false;
+    }
+
+    if (appliedFilters.dateFrom && user.joinDate < appliedFilters.dateFrom) {
+      return false;
+    }
+
+    if (appliedFilters.dateTo && user.joinDate > appliedFilters.dateTo) {
+      return false;
+    }
+
+    return true;
+  });
+
   const handleUserSubmit = async (data: any) => {
     setLoading(true);
     // Simulate API call
@@ -134,6 +168,14 @@ export default function AdminUsers() {
     }
   };
 
+  const handleApplyFilters = (filters: Record<string, string>) => {
+    setAppliedFilters(filters);
+  };
+
+  const handleClearFilters = () => {
+    setAppliedFilters({});
+  };
+
   const stats = [
     {
       title: "Total Users",
@@ -172,7 +214,11 @@ export default function AdminUsers() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="spotifySecondary" size="sm">
+          <Button
+            variant="spotifySecondary"
+            size="sm"
+            onClick={() => setFilterOpen(true)}
+          >
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
@@ -267,7 +313,7 @@ export default function AdminUsers() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr
                     key={user.id}
                     className="border-b border-spotify-light-gray hover:bg-spotify-hover transition-colors"
@@ -379,6 +425,15 @@ export default function AdminUsers() {
         onSubmit={handleUserSubmit}
         initialData={editingUser}
         loading={loading}
+      />
+
+      {/* User Filter */}
+      <UserFilter
+        isOpen={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
+        appliedFilters={appliedFilters}
       />
 
       {/* Confirm Dialog */}
