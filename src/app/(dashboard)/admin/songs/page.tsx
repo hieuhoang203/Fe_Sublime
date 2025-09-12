@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SongForm } from "@/components/forms/song-form";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Music,
   Search,
@@ -37,6 +38,7 @@ export default function AdminSongs() {
   const [editingSong, setEditingSong] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { confirm, ConfirmDialog } = useConfirmDialog();
+  const { openDrawer } = useSongDrawer();
 
   const songs = [
     {
@@ -44,48 +46,72 @@ export default function AdminSongs() {
       title: "Summer Vibes",
       artist: "John Doe",
       album: "Summer Collection",
-      duration: "3:45",
+      duration: 225, // 3:45 in seconds
       status: "approved" as const,
       uploadDate: "2024-01-15",
       plays: 12345,
       genre: "pop",
       coverImage: "",
+      coverUrl: "",
+      isLiked: false,
+      releaseDate: "2024-01-15",
+      playCount: 12345,
+      lyrics:
+        "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
     },
     {
       id: "2",
       title: "Midnight Dreams",
       artist: "Jane Smith",
       album: "Night Songs",
-      duration: "4:12",
+      duration: 252, // 4:12 in seconds
       status: "pending" as const,
       uploadDate: "2024-01-20",
       plays: 0,
       genre: "electronic",
       coverImage: "",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-01-20",
+      playCount: 0,
+      lyrics:
+        "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
     },
     {
       id: "3",
       title: "City Lights",
       artist: "Mike Johnson",
       album: "Urban Stories",
-      duration: "3:28",
+      duration: 208, // 3:28 in seconds
       status: "rejected" as const,
       uploadDate: "2024-01-18",
       plays: 0,
       genre: "hip-hop",
       coverImage: "",
+      coverUrl: "",
+      isLiked: false,
+      releaseDate: "2024-01-18",
+      playCount: 0,
+      lyrics:
+        "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
     },
     {
       id: "4",
       title: "Ocean Waves",
       artist: "Sarah Wilson",
       album: "Nature Sounds",
-      duration: "5:15",
+      duration: 315, // 5:15 in seconds
       status: "approved" as const,
       uploadDate: "2024-01-22",
       plays: 8765,
       genre: "ambient",
       coverImage: "",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-01-22",
+      playCount: 8765,
+      lyrics:
+        "Ocean waves crash against the shore\nNature's symphony forevermore\nIn the rhythm of the sea\nI find my peace and harmony",
     },
   ];
 
@@ -315,26 +341,23 @@ export default function AdminSongs() {
                 {filteredSongs.map((song) => (
                   <tr
                     key={song.id}
-                    className="border-b border-spotify-light-gray hover:bg-spotify-hover transition-colors"
+                    className="border-b border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer"
+                    onClick={() => openDrawer(song)}
                   >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-spotify-light-gray rounded-lg flex items-center justify-center">
-                          {song.coverImage ? (
-                            <img
-                              src={song.coverImage}
-                              alt={song.title}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                          ) : (
+                        <Avatar className="w-10 h-10">
+                          <AvatarImage src={song.coverUrl} />
+                          <AvatarFallback className="bg-spotify-light-gray">
                             <Music className="h-5 w-5 text-white/70" />
-                          )}
-                        </div>
+                          </AvatarFallback>
+                        </Avatar>
                         <div>
                           <p className="font-medium text-white">{song.title}</p>
                           <p className="text-sm text-spotify-text-gray flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            {song.duration}
+                            {Math.floor(song.duration / 60)}:
+                            {(song.duration % 60).toString().padStart(2, "0")}
                           </p>
                         </div>
                       </div>
@@ -342,7 +365,7 @@ export default function AdminSongs() {
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         <Avatar className="w-8 h-8">
-                          <AvatarFallback className="text-xs">
+                          <AvatarFallback className="bg-spotify-light-gray text-spotify-green font-semibold text-xs">
                             {song.artist.charAt(0)}
                           </AvatarFallback>
                         </Avatar>

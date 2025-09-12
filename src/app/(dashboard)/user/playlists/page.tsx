@@ -224,16 +224,38 @@ export default function UserPlaylists() {
               />
             </div>
             <div className="flex gap-2">
-              <select
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                className="px-3 py-2 bg-spotify-light-gray border border-spotify-light-gray rounded-md text-white text-sm focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none"
-              >
-                <option value="all">All Playlists</option>
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-                <option value="collaborative">Collaborative</option>
-              </select>
+              <div className="custom-select-wrapper">
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="enhanced-select"
+                >
+                  <option
+                    value="all"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    All Playlists
+                  </option>
+                  <option
+                    value="public"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Public
+                  </option>
+                  <option
+                    value="private"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Private
+                  </option>
+                  <option
+                    value="collaborative"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Collaborative
+                  </option>
+                </select>
+              </div>
               <Button variant="spotifySecondary" size="sm">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter

@@ -218,16 +218,38 @@ export default function ArtistAlbums() {
               />
             </div>
             <div className="flex gap-2">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-2 bg-spotify-light-gray border border-spotify-light-gray rounded-md text-white text-sm focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none"
-              >
-                <option value="all">All Status</option>
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-                <option value="archived">Archived</option>
-              </select>
+              <div className="custom-select-wrapper">
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="enhanced-select"
+                >
+                  <option
+                    value="all"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    All Status
+                  </option>
+                  <option
+                    value="draft"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Draft
+                  </option>
+                  <option
+                    value="published"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Published
+                  </option>
+                  <option
+                    value="archived"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Archived
+                  </option>
+                </select>
+              </div>
               <Button variant="spotifySecondary" size="sm">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter

@@ -328,7 +328,7 @@ export default function AdminArtists() {
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
                           <AvatarImage src={artist.avatar} alt={artist.name} />
-                          <AvatarFallback>
+                          <AvatarFallback className="bg-spotify-light-gray text-spotify-green font-semibold">
                             {artist.name.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>

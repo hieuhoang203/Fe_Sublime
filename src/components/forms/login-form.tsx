@@ -111,7 +111,7 @@ export function LoginForm({
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="login-form space-y-4">
           {/* Email Field */}
           <div className="space-y-1">
             <label className="text-sm font-medium text-white">Email</label>
@@ -122,9 +122,14 @@ export function LoginForm({
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`pl-12 bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
-                  errors.email ? "border-red-500" : ""
+                className={`pl-12 !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                  errors.email ? "!border-red-500" : ""
                 }`}
+                style={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  border: "1px solid transparent",
+                }}
               />
             </div>
             {errors.email && (
@@ -142,9 +147,14 @@ export function LoginForm({
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`pl-12 pr-12 bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
-                  errors.password ? "border-red-500" : ""
+                className={`pl-12 pr-12 !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                  errors.password ? "!border-red-500" : ""
                 }`}
+                style={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  border: "1px solid transparent",
+                }}
               />
               <button
                 type="button"
@@ -221,7 +231,7 @@ export function LoginForm({
           <Button
             variant="outline"
             size="sm"
-            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-hover hover:border-spotify-green/30 transition-all duration-300"
+            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-green hover:border-spotify-green hover:text-black transition-all duration-300"
           >
             <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24">
               <path
@@ -246,7 +256,7 @@ export function LoginForm({
           <Button
             variant="outline"
             size="sm"
-            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-hover hover:border-spotify-green/30 transition-all duration-300"
+            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-green hover:border-spotify-green hover:text-black transition-all duration-300"
           >
             <svg
               className="h-4 w-4 mr-1"

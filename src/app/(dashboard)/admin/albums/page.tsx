@@ -304,40 +304,46 @@ export default function AdminAlbums() {
               </div>
             </div>
             <div className="flex gap-2">
-              <select
-                value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(
-                    e.target.value as "all" | "draft" | "published" | "archived"
-                  )
-                }
-                className="px-3 py-2 bg-spotify-light-gray border border-spotify-light-gray rounded-md text-white text-sm focus:outline-none focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20"
-              >
-                <option
-                  value="all"
-                  className="bg-spotify-light-gray text-white"
+              <div className="custom-select-wrapper">
+                <select
+                  value={statusFilter}
+                  onChange={(e) =>
+                    setStatusFilter(
+                      e.target.value as
+                        | "all"
+                        | "draft"
+                        | "published"
+                        | "archived"
+                    )
+                  }
+                  className="enhanced-select"
                 >
-                  All Status
-                </option>
-                <option
-                  value="published"
-                  className="bg-spotify-light-gray text-white"
-                >
-                  Published
-                </option>
-                <option
-                  value="draft"
-                  className="bg-spotify-light-gray text-white"
-                >
-                  Draft
-                </option>
-                <option
-                  value="archived"
-                  className="bg-spotify-light-gray text-white"
-                >
-                  Archived
-                </option>
-              </select>
+                  <option
+                    value="all"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    All Status
+                  </option>
+                  <option
+                    value="published"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Published
+                  </option>
+                  <option
+                    value="draft"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Draft
+                  </option>
+                  <option
+                    value="archived"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Archived
+                  </option>
+                </select>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
@@ -384,8 +390,8 @@ export default function AdminAlbums() {
                 <div className="flex items-center space-x-4">
                   <Avatar className="h-12 w-12">
                     <AvatarImage src={album.coverImage} alt={album.title} />
-                    <AvatarFallback>
-                      <Music className="h-6 w-6" />
+                    <AvatarFallback className="bg-spotify-light-gray">
+                      <Music className="h-6 w-6 text-spotify-green" />
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
@@ -419,17 +425,17 @@ export default function AdminAlbums() {
                   <div className="flex items-center space-x-1">
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleEditAlbum(album)}
-                      className="h-8 w-8 p-0 hover:bg-spotify-hover"
+                      className="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleToggleStatus(album.id)}
-                      className="h-8 w-8 p-0 hover:bg-spotify-hover"
+                      className="h-8 w-8 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
                     >
                       {album.status === "published" ? (
                         <EyeOff className="h-4 w-4" />
@@ -439,16 +445,16 @@ export default function AdminAlbums() {
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleDeleteAlbum(album.id)}
-                      className="h-8 w-8 p-0 hover:bg-red-500/20 text-red-400 hover:text-red-300"
+                      className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-400/10"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 hover:bg-spotify-hover"
+                      size="icon"
+                      className="h-8 w-8 text-gray-400 hover:text-gray-300 hover:bg-gray-400/10"
                     >
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>

@@ -314,7 +314,7 @@ export function SongForm({
                   onChange={(e) =>
                     handleInputChange("releaseDate", e.target.value)
                   }
-                  className="flex w-full rounded-md border border-transparent bg-spotify-light-gray px-3 py-2 text-sm text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  className="enhanced-date-picker w-full"
                 />
               </FormField>
             </div>

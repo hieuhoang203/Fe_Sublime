@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { useProfile } from "@/contexts/profile-context";
-import { ProfileDialog } from "@/components/ui/profile-dialog";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   userType: "admin" | "artist" | "user";
@@ -13,12 +13,11 @@ interface HeaderProps {
 
 export function Header({ userType }: HeaderProps) {
   const { toggleSidebar } = useSidebar();
-  const { profile, isProfileOpen, openProfile, closeProfile, updateProfile } =
-    useProfile();
+  const { profile } = useProfile();
+  const router = useRouter();
 
-  const handleSaveProfile = (updatedProfile: any) => {
-    updateProfile(updatedProfile);
-    closeProfile();
+  const handleProfileClick = () => {
+    router.push(`/${userType}/settings`);
   };
 
   return (
@@ -58,7 +57,7 @@ export function Header({ userType }: HeaderProps) {
           {/* User Menu */}
           <div
             className="flex items-center gap-3 group cursor-pointer"
-            onClick={openProfile}
+            onClick={handleProfileClick}
           >
             <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <User className="h-5 w-5 text-black" />
@@ -82,16 +81,6 @@ export function Header({ userType }: HeaderProps) {
           </div>
         </div>
       </div>
-
-      {/* Profile Dialog */}
-      {profile && (
-        <ProfileDialog
-          open={isProfileOpen}
-          onOpenChange={closeProfile}
-          userProfile={profile}
-          onSave={handleSaveProfile}
-        />
-      )}
     </header>
   );
 }

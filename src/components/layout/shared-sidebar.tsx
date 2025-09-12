@@ -23,7 +23,6 @@ import {
   Music,
   Album,
   Mic,
-  PlayCircle,
   Download,
   Upload,
   TrendingUp,
@@ -58,6 +57,7 @@ const getNavItems = (userType: "admin" | "artist" | "user"): NavItem[] => {
         { name: "My Albums", href: "/artist/albums", icon: Album },
         { name: "Upload", href: "/artist/upload", icon: Upload },
         { name: "Analytics", href: "/artist/analytics", icon: TrendingUp },
+        { name: "Settings", href: "/artist/settings", icon: Settings },
       ];
     case "user":
       return [
@@ -66,6 +66,7 @@ const getNavItems = (userType: "admin" | "artist" | "user"): NavItem[] => {
         { name: "Your Library", href: "/user/library", icon: Library },
         { name: "Liked Songs", href: "/user/liked", icon: Heart },
         { name: "Playlists", href: "/user/playlists", icon: Plus },
+        { name: "Settings", href: "/user/settings", icon: Settings },
       ];
     default:
       return [];
@@ -116,7 +117,7 @@ export function SharedSidebar({ userType }: SidebarProps) {
             <div className="w-8 h-8 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg">
               <span className="text-black font-bold text-sm">S</span>
             </div>
-            <h1 className="text-2xl font-bold text-gradient">Spotify Clone</h1>
+            <h1 className="text-2xl font-bold text-gradient">Sublime</h1>
           </div>
         </div>
       </div>
@@ -150,9 +151,7 @@ export function SharedSidebar({ userType }: SidebarProps) {
               </span>
             </div>
             {!isCollapsed && (
-              <h1 className="text-2xl font-bold text-gradient">
-                Spotify Clone
-              </h1>
+              <h1 className="text-2xl font-bold text-gradient">Sublime</h1>
             )}
           </div>
         </div>

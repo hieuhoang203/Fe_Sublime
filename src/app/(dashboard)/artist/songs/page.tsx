@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SongForm } from "@/components/forms/song-form";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Music,
   Plus,
@@ -41,6 +42,7 @@ interface Song {
 
 export default function ArtistSongs() {
   const { confirm, ConfirmDialog } = useConfirmDialog();
+  const { openDrawer } = useSongDrawer();
   const [showSongForm, setShowSongForm] = useState(false);
   const [editingSong, setEditingSong] = useState<Song | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,44 +55,64 @@ export default function ArtistSongs() {
       title: "Summer Vibes",
       album: "Summer Collection",
       genre: "Pop",
-      duration: "3:45",
+      duration: 225, // 3:45 in seconds
       status: "approved",
       plays: 45234,
       releaseDate: "2024-06-15",
       coverImage: "/api/placeholder/64/64",
+      coverUrl: "",
+      isLiked: false,
+      playCount: 45234,
+      lyrics:
+        "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
     },
     {
       id: "2",
       title: "Midnight Dreams",
       album: "Night Songs",
       genre: "Electronic",
-      duration: "4:12",
+      duration: 252, // 4:12 in seconds
       status: "approved",
       plays: 32156,
       releaseDate: "2024-05-20",
       coverImage: "/api/placeholder/64/64",
+      coverUrl: "",
+      isLiked: true,
+      playCount: 32156,
+      lyrics:
+        "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
     },
     {
       id: "3",
       title: "New Beginning",
       album: "Fresh Start",
       genre: "Indie",
-      duration: "3:28",
+      duration: 208, // 3:28 in seconds
       status: "pending",
       plays: 0,
       releaseDate: "2024-07-01",
       coverImage: "/api/placeholder/64/64",
+      coverUrl: "",
+      isLiked: false,
+      playCount: 0,
+      lyrics:
+        "A new beginning starts today\nWith every step I find my way\nThe past is gone, the future's bright\nI'm ready for this new light",
     },
     {
       id: "4",
       title: "City Lights",
       album: "Urban Stories",
       genre: "Hip Hop",
-      duration: "3:55",
+      duration: 235, // 3:55 in seconds
       status: "approved",
       plays: 67432,
       releaseDate: "2024-04-10",
       coverImage: "/api/placeholder/64/64",
+      coverUrl: "",
+      isLiked: true,
+      playCount: 67432,
+      lyrics:
+        "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
     },
   ]);
 
@@ -202,17 +224,44 @@ export default function ArtistSongs() {
               />
             </div>
             <div className="flex gap-2">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-2 bg-spotify-light-gray border border-spotify-light-gray rounded-md text-white text-sm focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none"
-              >
-                <option value="all">All Status</option>
-                <option value="draft">Draft</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-              </select>
+              <div className="custom-select-wrapper">
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="enhanced-select"
+                >
+                  <option
+                    value="all"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    All Status
+                  </option>
+                  <option
+                    value="draft"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Draft
+                  </option>
+                  <option
+                    value="pending"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Pending
+                  </option>
+                  <option
+                    value="approved"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Approved
+                  </option>
+                  <option
+                    value="rejected"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    Rejected
+                  </option>
+                </select>
+              </div>
               <Button variant="spotifySecondary" size="sm">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
@@ -237,7 +286,8 @@ export default function ArtistSongs() {
             {filteredSongs.map((song) => (
               <div
                 key={song.id}
-                className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group"
+                className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group cursor-pointer"
+                onClick={() => openDrawer(song)}
               >
                 {/* Cover Image */}
                 <div className="w-12 h-12 bg-spotify-light-gray rounded-lg flex items-center justify-center overflow-hidden">
@@ -259,7 +309,8 @@ export default function ArtistSongs() {
                   </h3>
                   <p className="text-spotify-text-gray text-sm truncate">
                     {song.album && `${song.album} • `}
-                    {song.genre} • {song.duration}
+                    {song.genre} • {Math.floor(song.duration / 60)}:
+                    {(song.duration % 60).toString().padStart(2, "0")}
                   </p>
                   <div className="flex items-center gap-4 mt-1">
                     <span className="text-xs text-spotify-text-gray">

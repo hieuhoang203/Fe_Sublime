@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { MusicPlayerProvider } from "@/contexts/music-player-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Spotify Clone",
+  title: "Sublime",
   description:
     "A modern music streaming platform with admin, artist, and user interfaces",
 };
@@ -28,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <MusicPlayerProvider>{children}</MusicPlayerProvider>
       </body>
     </html>
   );

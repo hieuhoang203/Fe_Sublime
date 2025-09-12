@@ -187,7 +187,7 @@ export function ArtistForm({
           <div className="flex items-center gap-6">
             <Avatar className="h-20 w-20">
               <AvatarImage src={formData.avatar} alt={formData.name} />
-              <AvatarFallback>
+              <AvatarFallback className="bg-spotify-light-gray text-spotify-green font-semibold text-xl">
                 {formData.name.charAt(0).toUpperCase() || "A"}
               </AvatarFallback>
             </Avatar>

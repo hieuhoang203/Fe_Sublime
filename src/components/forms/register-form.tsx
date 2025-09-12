@@ -165,7 +165,7 @@ export function RegisterForm({
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="register-form space-y-4">
           {/* Role Selection */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-white">
@@ -216,7 +216,7 @@ export function RegisterForm({
                 placeholder="First name"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange("firstName", e.target.value)}
-                className={`bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
+                className={`bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
                   errors.firstName ? "border-red-500" : ""
                 }`}
               />
@@ -233,7 +233,7 @@ export function RegisterForm({
                 placeholder="Last name"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange("lastName", e.target.value)}
-                className={`bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
+                className={`bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
                   errors.lastName ? "border-red-500" : ""
                 }`}
               />
@@ -253,9 +253,14 @@ export function RegisterForm({
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`pl-12 bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
-                  errors.email ? "border-red-500" : ""
+                className={`pl-12 !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                  errors.email ? "!border-red-500" : ""
                 }`}
+                style={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  border: "1px solid transparent",
+                }}
               />
             </div>
             {errors.email && (
@@ -270,16 +275,18 @@ export function RegisterForm({
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/70" />
               <Input
                 type={showPassword ? "text" : "password"}
-                placeholder="Create a password"
+                placeholder="Enter your password"
                 value={formData.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`pl-12 pr-12 bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
+                onChange={(e) =>
+                  handleInputChange("confirmPassword", e.target.value)
+                }
+                className={`pl-12 pr-12 bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
                   errors.password ? "border-red-500" : ""
                 }`}
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowConfirmPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors"
               >
                 {showPassword ? (
@@ -351,7 +358,7 @@ export function RegisterForm({
                 onChange={(e) =>
                   handleInputChange("confirmPassword", e.target.value)
                 }
-                className={`pl-12 pr-12 bg-spotify-light-gray border-spotify-light-gray text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:ring-spotify-green/20 ${
+                className={`pl-12 pr-12 bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
                   errors.confirmPassword ? "border-red-500" : ""
                 }`}
               />
@@ -442,7 +449,7 @@ export function RegisterForm({
           <Button
             variant="outline"
             size="sm"
-            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-hover hover:border-spotify-green/30 transition-all duration-300"
+            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-green hover:border-spotify-green hover:text-black transition-all duration-300"
           >
             <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24">
               <path
@@ -467,7 +474,7 @@ export function RegisterForm({
           <Button
             variant="outline"
             size="sm"
-            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-hover hover:border-spotify-green/30 transition-all duration-300"
+            className="bg-spotify-light-gray/50 border-spotify-light-gray/30 text-white hover:bg-spotify-green hover:border-spotify-green hover:text-black transition-all duration-300"
           >
             <svg
               className="h-4 w-4 mr-1"

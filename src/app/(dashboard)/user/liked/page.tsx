@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Play,
   Pause,
@@ -33,14 +34,20 @@ interface LikedSong {
   title: string;
   artist: string;
   album?: string;
-  duration: string;
+  duration: number; // in seconds
   likedAt: string;
   coverImage?: string;
   genre?: string;
+  coverUrl?: string;
+  isLiked?: boolean;
+  releaseDate?: string;
+  playCount?: number;
+  lyrics?: string;
 }
 
 export default function LikedSongs() {
   const { confirm, ConfirmDialog } = useConfirmDialog();
+  const { openDrawer } = useSongDrawer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterGenre, setFilterGenre] = useState<string>("all");
@@ -52,60 +59,96 @@ export default function LikedSongs() {
       title: "Summer Vibes",
       artist: "Current Artist",
       album: "Summer Collection",
-      duration: "3:45",
+      duration: 225, // 3:45 in seconds
       likedAt: "2024-06-20",
       coverImage: "/api/placeholder/64/64",
       genre: "Pop",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-06-15",
+      playCount: 1250000,
+      lyrics:
+        "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
     },
     {
       id: "2",
       title: "Midnight Dreams",
       artist: "Another Artist",
       album: "Night Songs",
-      duration: "4:12",
+      duration: 252, // 4:12 in seconds
       likedAt: "2024-06-18",
       coverImage: "/api/placeholder/64/64",
       genre: "Electronic",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-05-20",
+      playCount: 890000,
+      lyrics:
+        "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
     },
     {
       id: "3",
       title: "City Lights",
       artist: "Urban Artist",
       album: "Urban Stories",
-      duration: "3:55",
+      duration: 235, // 3:55 in seconds
       likedAt: "2024-06-15",
       coverImage: "/api/placeholder/64/64",
       genre: "Hip Hop",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-04-10",
+      playCount: 2100000,
+      lyrics:
+        "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
     },
     {
       id: "4",
       title: "New Beginning",
       artist: "Indie Artist",
       album: "Fresh Start",
-      duration: "3:28",
+      duration: 208, // 3:28 in seconds
       likedAt: "2024-06-10",
       coverImage: "/api/placeholder/64/64",
       genre: "Indie",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-07-01",
+      playCount: 450000,
+      lyrics:
+        "A new beginning starts today\nWith every step I find my way\nThe past is gone, the future's bright\nI'm ready for this new light",
     },
     {
       id: "5",
       title: "Ocean Waves",
       artist: "Ambient Artist",
       album: "Nature Sounds",
-      duration: "5:20",
+      duration: 320, // 5:20 in seconds
       likedAt: "2024-06-08",
       coverImage: "/api/placeholder/64/64",
       genre: "Ambient",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-03-25",
+      playCount: 320000,
+      lyrics:
+        "Ocean waves crash against the shore\nNature's symphony forevermore\nIn the rhythm of the sea\nI find my peace and harmony",
     },
     {
       id: "6",
       title: "Dance Floor",
       artist: "EDM Artist",
       album: "Party Hits",
-      duration: "3:15",
+      duration: 195, // 3:15 in seconds
       likedAt: "2024-06-05",
       coverImage: "/api/placeholder/64/64",
       genre: "Electronic",
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-02-14",
+      playCount: 1800000,
+      lyrics:
+        "On the dance floor we unite\nUnder the neon lights\nFeel the beat, feel the heat\nMove your body to the rhythm",
     },
   ]);
 
@@ -150,8 +193,7 @@ export default function LikedSongs() {
   };
 
   const totalDuration = likedSongs.reduce((total, song) => {
-    const [minutes, seconds] = song.duration.split(":").map(Number);
-    return total + minutes * 60 + seconds;
+    return total + song.duration;
   }, 0);
 
   const formatTotalDuration = (totalSeconds: number) => {
@@ -267,18 +309,29 @@ export default function LikedSongs() {
               />
             </div>
             <div className="flex gap-2">
-              <select
-                value={filterGenre}
-                onChange={(e) => setFilterGenre(e.target.value)}
-                className="px-3 py-2 bg-spotify-light-gray border border-spotify-light-gray rounded-md text-white text-sm focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none"
-              >
-                <option value="all">All Genres</option>
-                {genres.map((genre) => (
-                  <option key={genre} value={genre}>
-                    {genre}
+              <div className="custom-select-wrapper">
+                <select
+                  value={filterGenre}
+                  onChange={(e) => setFilterGenre(e.target.value)}
+                  className="enhanced-select"
+                >
+                  <option
+                    value="all"
+                    className="bg-spotify-light-gray text-white"
+                  >
+                    All Genres
                   </option>
-                ))}
-              </select>
+                  {genres.map((genre) => (
+                    <option
+                      key={genre}
+                      value={genre}
+                      className="bg-spotify-light-gray text-white"
+                    >
+                      {genre}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <Button
                 variant="spotifySecondary"
                 size="sm"
@@ -307,7 +360,8 @@ export default function LikedSongs() {
             {filteredSongs.map((song, index) => (
               <div
                 key={song.id}
-                className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group"
+                className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group cursor-pointer"
+                onClick={() => openDrawer(song)}
               >
                 {/* Track Number */}
                 <div className="w-8 text-center text-spotify-text-gray text-sm">
@@ -355,7 +409,8 @@ export default function LikedSongs() {
 
                 {/* Duration */}
                 <div className="text-spotify-text-gray text-sm">
-                  {formatDuration(song.duration)}
+                  {Math.floor(song.duration / 60)}:
+                  {(song.duration % 60).toString().padStart(2, "0")}
                 </div>
 
                 {/* Actions */}

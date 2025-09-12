@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Library,
   Search,
@@ -28,6 +29,7 @@ export default function UserLibrary() {
   const [activeTab, setActiveTab] = useState<
     "playlists" | "artists" | "albums" | "songs"
   >("playlists");
+  const { openDrawer } = useSongDrawer();
 
   const playlists = [
     {
@@ -136,36 +138,60 @@ export default function UserLibrary() {
 
   const songs = [
     {
-      id: 1,
+      id: "1",
       title: "Summer Vibes",
       artist: "John Doe",
       album: "Summer Collection",
-      duration: "3:45",
+      duration: 225, // 3:45 in seconds
       isLiked: true,
+      coverUrl: "",
+      releaseDate: "2024-06-15",
+      genre: "Pop",
+      playCount: 1250000,
+      lyrics:
+        "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
     },
     {
-      id: 2,
+      id: "2",
       title: "Midnight Dreams",
       artist: "Jane Smith",
       album: "Night Songs",
-      duration: "4:12",
+      duration: 252, // 4:12 in seconds
       isLiked: false,
+      coverUrl: "",
+      releaseDate: "2024-05-20",
+      genre: "R&B",
+      playCount: 890000,
+      lyrics:
+        "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
     },
     {
-      id: 3,
+      id: "3",
       title: "City Lights",
       artist: "Mike Johnson",
       album: "Urban Stories",
-      duration: "3:28",
+      duration: 208, // 3:28 in seconds
       isLiked: true,
+      coverUrl: "",
+      releaseDate: "2024-04-10",
+      genre: "Hip-Hop",
+      playCount: 2100000,
+      lyrics:
+        "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
     },
     {
-      id: 4,
+      id: "4",
       title: "Ocean Waves",
       artist: "Sarah Wilson",
       album: "Nature Sounds",
-      duration: "5:15",
+      duration: 315, // 5:15 in seconds
       isLiked: false,
+      coverUrl: "",
+      releaseDate: "2024-03-25",
+      genre: "Ambient",
+      playCount: 450000,
+      lyrics:
+        "Ocean waves crash against the shore\nNature's symphony forevermore\nIn the rhythm of the sea\nI find my peace and harmony",
     },
   ];
 
@@ -180,158 +206,162 @@ export default function UserLibrary() {
     switch (activeTab) {
       case "playlists":
         return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {playlists.map((playlist) => (
-            <Card
-              key={playlist.id}
-              className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer group"
-            >
-              <CardContent className="p-4">
-                <div className="flex items-center gap-4">
-                  <div className="text-3xl">{playlist.cover}</div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-white truncate">
-                      {playlist.name}
-                    </h3>
-                    <p className="text-sm text-spotify-text-gray truncate">
-                      {playlist.description}
-                    </p>
-                    <p className="text-xs text-spotify-text-gray">
-                      {playlist.songs} songs
-                    </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {playlists.map((playlist) => (
+              <Card
+                key={playlist.id}
+                className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer group"
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+                    <div className="text-3xl">{playlist.cover}</div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-white truncate">
+                        {playlist.name}
+                      </h3>
+                      <p className="text-sm text-spotify-text-gray truncate">
+                        {playlist.description}
+                      </p>
+                      <p className="text-xs text-spotify-text-gray">
+                        {playlist.songs} songs
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-green-400 hover:text-green-300 hover:bg-green-400/10"
+                    >
+                      <Play className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity text-green-400 hover:text-green-300 hover:bg-green-400/10"
-                  >
-                    <Play className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         );
       case "artists":
         return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {artists.map((artist) => (
-            <Card
-              key={artist.id}
-              className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer group"
-            >
-              <CardContent className="p-4">
-                <div className="text-center">
-                  <div className="text-4xl mb-3">{artist.cover}</div>
-                  <h3 className="font-medium text-white truncate">
-                    {artist.name}
-                  </h3>
-                  <p className="text-sm text-spotify-text-gray">
-                    {artist.followers} followers
-                  </p>
-                  <p className="text-xs text-spotify-text-gray">
-                    {artist.songs} songs
-                  </p>
-                  <Button
-                    variant={
-                      artist.isFollowing ? "spotifySecondary" : "spotify"
-                    }
-                    size="sm"
-                    className="mt-3 w-full"
-                  >
-                    {artist.isFollowing ? "Following" : "Follow"}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {artists.map((artist) => (
+              <Card
+                key={artist.id}
+                className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer group"
+              >
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">{artist.cover}</div>
+                    <h3 className="font-medium text-white truncate">
+                      {artist.name}
+                    </h3>
+                    <p className="text-sm text-spotify-text-gray">
+                      {artist.followers} followers
+                    </p>
+                    <p className="text-xs text-spotify-text-gray">
+                      {artist.songs} songs
+                    </p>
+                    <Button
+                      variant={
+                        artist.isFollowing ? "spotifySecondary" : "spotify"
+                      }
+                      size="sm"
+                      className="mt-3 w-full"
+                    >
+                      {artist.isFollowing ? "Following" : "Follow"}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         );
       case "albums":
         return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {albums.map((album) => (
-            <Card
-              key={album.id}
-              className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer group"
-            >
-              <CardContent className="p-4">
-                <div className="text-center">
-                  <div className="text-4xl mb-3">{album.cover}</div>
-                  <h3 className="font-medium text-white truncate">
-                    {album.name}
-                  </h3>
-                  <p className="text-sm text-spotify-text-gray truncate">
-                    {album.artist}
-                  </p>
-                  <p className="text-xs text-spotify-text-gray">
-                    {album.year} • {album.songs} songs
-                  </p>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity mt-2 text-green-400 hover:text-green-300 hover:bg-green-400/10"
-                  >
-                    <Play className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {albums.map((album) => (
+              <Card
+                key={album.id}
+                className="bg-spotify-gray border-spotify-light-gray hover:bg-spotify-hover transition-colors cursor-pointer group"
+              >
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">{album.cover}</div>
+                    <h3 className="font-medium text-white truncate">
+                      {album.name}
+                    </h3>
+                    <p className="text-sm text-spotify-text-gray truncate">
+                      {album.artist}
+                    </p>
+                    <p className="text-xs text-spotify-text-gray">
+                      {album.year} • {album.songs} songs
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity mt-2 text-green-400 hover:text-green-300 hover:bg-green-400/10"
+                    >
+                      <Play className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         );
       case "songs":
         return (
-        <Card className="bg-spotify-gray border-spotify-light-gray">
-          <CardContent className="p-0">
-            <div className="space-y-1">
-              {songs.map((song, index) => (
-                <div
-                  key={song.id}
-                  className="flex items-center gap-4 p-4 hover:bg-spotify-light-gray transition-colors group"
-                >
-                  <span className="text-spotify-text-gray text-sm w-6">
-                    {index + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-white truncate">
-                      {song.title}
-                    </h3>
-                    <p className="text-sm text-spotify-text-gray truncate">
-                      {song.artist} • {song.album}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm text-spotify-text-gray">
-                      {song.duration}
+          <Card className="bg-spotify-gray border-spotify-light-gray">
+            <CardContent className="p-0">
+              <div className="space-y-1">
+                {songs.map((song, index) => (
+                  <div
+                    key={song.id}
+                    className="flex items-center gap-4 p-4 hover:bg-spotify-light-gray transition-colors group cursor-pointer"
+                    onClick={() => openDrawer(song)}
+                  >
+                    <span className="text-spotify-text-gray text-sm w-6">
+                      {index + 1}
                     </span>
-                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-white/70 hover:text-red-400 hover:bg-red-400/10"
-                      >
-                        <Heart
-                          className={`h-4 w-4 ${
-                            song.isLiked ? "text-red-400 fill-current" : "text-current"
-                          }`}
-                        />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-white truncate">
+                        {song.title}
+                      </h3>
+                      <p className="text-sm text-spotify-text-gray truncate">
+                        {song.artist} • {song.album}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm text-spotify-text-gray">
+                        {Math.floor(song.duration / 60)}:
+                        {(song.duration % 60).toString().padStart(2, "0")}
+                      </span>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-white/70 hover:text-red-400 hover:bg-red-400/10"
+                        >
+                          <Heart
+                            className={`h-4 w-4 ${
+                              song.isLiked
+                                ? "text-red-400 fill-current"
+                                : "text-current"
+                            }`}
+                          />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-white/70 hover:text-white hover:bg-white/10"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         );
       default:
         return null;

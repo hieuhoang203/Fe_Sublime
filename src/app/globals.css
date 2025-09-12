@@ -230,6 +230,42 @@
   @apply bg-gradient-to-r from-spotify-black via-spotify-gray to-spotify-black border-t border-spotify-light-gray backdrop-blur-sm;
 }
 
+/* Progress bar thumb positioning */
+.progress-bar-container {
+  position: relative;
+  overflow: visible;
+  margin: 0 12px; /* Increase margin for better spacing */
+}
+
+.progress-bar-thumb {
+  position: absolute;
+  right: -6px; /* Move thumb slightly inside to prevent overlap */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.progress-bar-container:hover .progress-bar-thumb {
+  opacity: 1;
+}
+
+/* Ensure time labels don't get overlapped */
+.time-label {
+  position: relative;
+  z-index: 20;
+  background: transparent;
+  min-width: 45px; /* Increase minimum width for better spacing */
+  flex-shrink: 0; /* Prevent shrinking */
+  text-align: center; /* Center align text */
+}
+
 /* Enhanced scrollbar */
 .enhanced-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -897,5 +933,644 @@
   
   .mobile-shadow-opacity-100 {
     --tw-shadow-color: rgba(0, 0, 0, 1);
+  }
+}
+
+/* Custom Select and Date Picker Dropdown Styles */
+@layer components {
+  /* Select dropdown styling */
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b3b3b3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 14px;
+    padding-right: 42px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Custom select dropdown options */
+  select option {
+    background-color: var(--spotify-light-gray);
+    color: var(--spotify-white);
+    padding: 10px 16px;
+    border: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.15s ease;
+  }
+
+  select option:hover {
+    background-color: var(--spotify-hover);
+    color: var(--spotify-white);
+  }
+
+  select option:checked {
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+    font-weight: 500;
+  }
+
+  select option:focus {
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+    outline: none;
+  }
+
+  /* Date picker styling */
+  input[type="date"] {
+    position: relative;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+  }
+
+  input[type="date"]::-webkit-datetime-edit {
+    color: var(--spotify-white);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    background: transparent;
+    padding: 0;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-text {
+    color: var(--spotify-text-gray);
+    padding: 0 4px;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    color: var(--spotify-white);
+    background: transparent;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-month-field:focus,
+  input[type="date"]::-webkit-datetime-edit-day-field:focus,
+  input[type="date"]::-webkit-datetime-edit-year-field:focus {
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+    outline: none;
+  }
+
+  /* Custom dropdown arrow for select */
+  .custom-select-wrapper {
+    position: relative;
+  }
+
+  .custom-select-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--spotify-text-gray);
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+
+  .custom-select-wrapper:hover::after {
+    border-top-color: var(--spotify-white);
+  }
+
+  .custom-select-wrapper:focus-within::after {
+    border-top-color: var(--spotify-green);
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* Enhanced dropdown animations */
+  @keyframes dropdownSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes dropdownSlideOut {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+  }
+
+  .dropdown-enter {
+    animation: dropdownSlideIn 0.2s ease-out;
+  }
+
+  .dropdown-exit {
+    animation: dropdownSlideOut 0.15s ease-in;
+  }
+
+  /* Custom scrollbar for select options */
+  select::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  select::-webkit-scrollbar-track {
+    background: var(--spotify-black);
+    border-radius: 3px;
+  }
+
+  select::-webkit-scrollbar-thumb {
+    background: var(--spotify-light-gray);
+    border-radius: 3px;
+  }
+
+  select::-webkit-scrollbar-thumb:hover {
+    background: var(--spotify-green);
+  }
+
+  /* Focus states for better accessibility */
+  select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--spotify-green);
+    border-color: var(--spotify-green);
+  }
+
+  input[type="date"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--spotify-green);
+    border-color: var(--spotify-green);
+  }
+
+  /* Hover effects */
+  select:hover {
+    border-color: var(--spotify-green);
+    background-color: var(--spotify-hover);
+  }
+
+  input[type="date"]:hover {
+    border-color: var(--spotify-green);
+    background-color: var(--spotify-hover);
+  }
+
+  /* Disabled states */
+  select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--spotify-black);
+    border-color: var(--spotify-light-gray);
+  }
+
+  input[type="date"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--spotify-black);
+    border-color: var(--spotify-light-gray);
+  }
+
+  /* Error states */
+  select.error {
+    border-color: #e22134;
+    box-shadow: 0 0 0 2px rgba(226, 33, 52, 0.2);
+  }
+
+  input[type="date"].error {
+    border-color: #e22134;
+    box-shadow: 0 0 0 2px rgba(226, 33, 52, 0.2);
+  }
+
+  /* Success states */
+  select.success {
+    border-color: var(--spotify-green);
+    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+  }
+
+  input[type="date"].success {
+    border-color: var(--spotify-green);
+    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+  }
+
+  /* Modern glass effect for dropdowns */
+  .glass-dropdown {
+    background: rgba(40, 40, 40, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Enhanced select with custom styling */
+  .enhanced-select {
+    position: relative !important;
+    background: var(--spotify-light-gray) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: var(--spotify-white) !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    padding: 12px 42px 12px 16px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .enhanced-select:hover {
+    border-color: rgba(29, 185, 84, 0.3) !important;
+    background-color: var(--spotify-hover) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .enhanced-select:focus {
+    outline: none !important;
+    border-color: var(--spotify-green) !important;
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.15), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .enhanced-select:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Enhanced date picker */
+  .enhanced-date-picker {
+    position: relative !important;
+    background: var(--spotify-light-gray) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: var(--spotify-white) !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    padding: 12px 16px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .enhanced-date-picker:hover {
+    border-color: rgba(29, 185, 84, 0.3) !important;
+    background-color: var(--spotify-hover) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .enhanced-date-picker:focus {
+    outline: none !important;
+    border-color: var(--spotify-green) !important;
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.15), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .enhanced-date-picker:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .enhanced-date-picker::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+  }
+
+  .enhanced-date-picker::-webkit-datetime-edit {
+    color: var(--spotify-white);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .enhanced-date-picker::-webkit-datetime-edit-fields-wrapper {
+    background: transparent;
+    padding: 0;
+  }
+
+  .enhanced-date-picker::-webkit-datetime-edit-text {
+    color: var(--spotify-text-gray);
+    padding: 0 4px;
+  }
+
+  .enhanced-date-picker::-webkit-datetime-edit-month-field,
+  .enhanced-date-picker::-webkit-datetime-edit-day-field,
+  .enhanced-date-picker::-webkit-datetime-edit-year-field {
+    color: var(--spotify-white);
+    background: transparent;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+  .enhanced-date-picker::-webkit-datetime-edit-month-field:focus,
+  .enhanced-date-picker::-webkit-datetime-edit-day-field:focus,
+  .enhanced-date-picker::-webkit-datetime-edit-year-field:focus {
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+    outline: none;
+  }
+
+  /* Fix autofill styles for all input types */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset !important;
+    -webkit-text-fill-color: var(--spotify-white) !important;
+    background-color: var(--spotify-light-gray) !important;
+    border: 1px solid var(--spotify-light-gray) !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    caret-color: var(--spotify-white) !important;
+    color: var(--spotify-white) !important;
+  }
+
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset, 0 0 0 3px rgba(29, 185, 84, 0.15) !important;
+    border-color: var(--spotify-green) !important;
+    caret-color: var(--spotify-white) !important;
+  }
+
+  /* Fix autofill corner artifacts */
+  input:-webkit-autofill {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+
+  /* Specific fixes for form inputs */
+  .form-input:-webkit-autofill,
+  .form-input:-webkit-autofill:hover,
+  .form-input:-webkit-autofill:focus,
+  .form-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset !important;
+    -webkit-text-fill-color: var(--spotify-white) !important;
+    background-color: var(--spotify-light-gray) !important;
+    border: 1px solid var(--spotify-light-gray) !important;
+    border-radius: 8px !important;
+    caret-color: var(--spotify-white) !important;
+    color: var(--spotify-white) !important;
+  }
+
+  .form-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset, 0 0 0 3px rgba(29, 185, 84, 0.15) !important;
+    border-color: var(--spotify-green) !important;
+    caret-color: var(--spotify-white) !important;
+  }
+
+  .form-input:-webkit-autofill {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+
+  /* Fix for enhanced inputs */
+  .enhanced-input:-webkit-autofill,
+  .enhanced-input:-webkit-autofill:hover,
+  .enhanced-input:-webkit-autofill:focus,
+  .enhanced-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset !important;
+    -webkit-text-fill-color: var(--spotify-white) !important;
+    background-color: var(--spotify-light-gray) !important;
+    border: 1px solid var(--spotify-light-gray) !important;
+    border-radius: 8px !important;
+    caret-color: var(--spotify-white) !important;
+    color: var(--spotify-white) !important;
+  }
+
+  .enhanced-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset, 0 0 0 3px rgba(29, 185, 84, 0.15) !important;
+    border-color: var(--spotify-green) !important;
+    caret-color: var(--spotify-white) !important;
+  }
+
+  .enhanced-input:-webkit-autofill {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+
+  /* Additional fixes for autofill artifacts */
+  input:-webkit-autofill,
+  .form-input:-webkit-autofill,
+  .enhanced-input:-webkit-autofill {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-border-radius: 8px !important;
+    border-radius: 8px !important;
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset !important;
+    box-shadow: 0 0 0 30px var(--spotify-light-gray) inset !important;
+  }
+
+  /* Fix for autofill selection */
+  input:-webkit-autofill::selection,
+  .form-input:-webkit-autofill::selection,
+  .enhanced-input:-webkit-autofill::selection {
+    background-color: var(--spotify-green) !important;
+    color: var(--spotify-black) !important;
+  }
+
+  /* Specific fixes for login form inputs */
+  .login-form input:-webkit-autofill,
+  .login-form input:-webkit-autofill:hover,
+  .login-form input:-webkit-autofill:focus,
+  .login-form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+    -webkit-text-fill-color: var(--spotify-white) !important;
+    background-color: #1a1a1a !important;
+    border: 1px solid transparent !important;
+    border-radius: 8px !important;
+    caret-color: var(--spotify-white) !important;
+    color: var(--spotify-white) !important;
+  }
+
+  .login-form input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #1a1a1a inset, 0 0 0 3px rgba(29, 185, 84, 0.15) !important;
+    border-color: var(--spotify-green) !important;
+    caret-color: var(--spotify-white) !important;
+  }
+
+  .login-form input:-webkit-autofill {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+
+  /* Fix for register form inputs */
+  .register-form input:-webkit-autofill,
+  .register-form input:-webkit-autofill:hover,
+  .register-form input:-webkit-autofill:focus,
+  .register-form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset !important;
+    -webkit-text-fill-color: var(--spotify-white) !important;
+    background-color: var(--spotify-light-gray) !important;
+    border: 1px solid var(--spotify-light-gray) !important;
+    border-radius: 8px !important;
+    caret-color: var(--spotify-white) !important;
+    color: var(--spotify-white) !important;
+  }
+
+  .register-form input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px var(--spotify-light-gray) inset, 0 0 0 3px rgba(29, 185, 84, 0.15) !important;
+    border-color: var(--spotify-green) !important;
+    caret-color: var(--spotify-white) !important;
+  }
+
+  .register-form input:-webkit-autofill {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+
+  /* Music Player Styles */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-track {
+    background: var(--spotify-light-gray);
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--spotify-white);
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .slider:hover::-webkit-slider-thumb {
+    opacity: 1;
+  }
+
+  .slider::-moz-range-track {
+    background: var(--spotify-light-gray);
+    height: 4px;
+    border-radius: 2px;
+    border: none;
+  }
+
+  .slider::-moz-range-thumb {
+    background: var(--spotify-white);
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .slider:hover::-moz-range-thumb {
+    opacity: 1;
+  }
+
+  /* Volume Slider Styles */
+  .volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .volume-slider::-webkit-slider-track {
+    background: linear-gradient(to right, #ffffff 0%, #ffffff var(--volume-percentage, 0%), #d1d5db var(--volume-percentage, 0%), #d1d5db 100%);
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #ffffff;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .volume-slider:hover::-webkit-slider-thumb {
+    opacity: 1;
+  }
+
+  .volume-slider:hover::-webkit-slider-track {
+    background: linear-gradient(to right, #ffffff 0%, #ffffff var(--volume-percentage, 0%), #f3f4f6 var(--volume-percentage, 0%), #f3f4f6 100%);
+  }
+
+  .volume-slider::-moz-range-track {
+    background: linear-gradient(to right, #ffffff 0%, #ffffff var(--volume-percentage, 0%), #d1d5db var(--volume-percentage, 0%), #d1d5db 100%);
+    height: 4px;
+    border-radius: 2px;
+    border: none;
+  }
+
+  .volume-slider::-moz-range-thumb {
+    background: #ffffff;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .volume-slider:hover::-moz-range-thumb {
+    opacity: 1;
+  }
+
+  .volume-slider:hover::-moz-range-track {
+    background: linear-gradient(to right, #ffffff 0%, #ffffff var(--volume-percentage, 0%), #f3f4f6 var(--volume-percentage, 0%), #f3f4f6 100%);
+  }
+
+  /* Focus states for volume slider */
+  .volume-slider:focus {
+    outline: none;
+  }
+
+  .volume-slider:focus::-webkit-slider-thumb {
+    opacity: 1;
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
+  }
+
+  .volume-slider:focus::-moz-range-thumb {
+    opacity: 1;
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
   }
 }

@@ -88,7 +88,7 @@ const FormInput = ({
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       className={cn(
-        "bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray focus:border focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20 focus:outline-none",
+        "enhanced-input form-input bg-spotify-light-gray border-0 text-white placeholder:text-spotify-text-gray focus:border focus:border-spotify-green focus:outline-none",
         className
       )}
     />
@@ -127,30 +127,29 @@ const FormSelect = ({
   className,
 }: FormSelectProps) => {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      disabled={disabled}
-      className={cn(
-        "flex w-full rounded-md border-0 bg-spotify-light-gray px-3 py-2 text-sm text-white placeholder:text-spotify-text-gray focus:border focus:border-spotify-green focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      )}
-    >
-      {placeholder && (
-        <option value="" disabled>
-          {placeholder}
-        </option>
-      )}
-      {options.map((option) => (
-        <option
-          key={option.value}
-          value={option.value}
-          className="bg-spotify-light-gray"
-        >
-          {option.label}
-        </option>
-      ))}
-    </select>
+    <div className="custom-select-wrapper">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
+        className={cn("enhanced-select w-full", className)}
+      >
+        {placeholder && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
+        {options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            className="bg-spotify-light-gray text-white"
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };
 

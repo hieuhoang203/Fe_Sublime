@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Play,
   Pause,
@@ -66,6 +67,7 @@ export default function PlaylistDetail() {
   const params = useParams();
   const playlistId = params.id as string;
   const { confirm, ConfirmDialog } = useConfirmDialog();
+  const { openDrawer } = useSongDrawer();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -93,40 +95,64 @@ export default function PlaylistDetail() {
         title: "Summer Vibes",
         artist: "Current Artist",
         album: "Summer Collection",
-        duration: "3:45",
+        duration: 225, // 3:45 in seconds
         addedAt: "2024-06-20",
         isLiked: true,
         coverImage: "/api/placeholder/64/64",
+        coverUrl: "",
+        releaseDate: "2024-06-15",
+        genre: "Pop",
+        playCount: 1250000,
+        lyrics:
+          "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
       },
       {
         id: "2",
         title: "Midnight Dreams",
         artist: "Another Artist",
         album: "Night Songs",
-        duration: "4:12",
+        duration: 252, // 4:12 in seconds
         addedAt: "2024-06-18",
         isLiked: false,
         coverImage: "/api/placeholder/64/64",
+        coverUrl: "",
+        releaseDate: "2024-05-20",
+        genre: "R&B",
+        playCount: 890000,
+        lyrics:
+          "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
       },
       {
         id: "3",
         title: "City Lights",
         artist: "Urban Artist",
         album: "Urban Stories",
-        duration: "3:55",
+        duration: 235, // 3:55 in seconds
         addedAt: "2024-06-15",
         isLiked: true,
         coverImage: "/api/placeholder/64/64",
+        coverUrl: "",
+        releaseDate: "2024-04-10",
+        genre: "Hip-Hop",
+        playCount: 2100000,
+        lyrics:
+          "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
       },
       {
         id: "4",
         title: "New Beginning",
         artist: "Indie Artist",
         album: "Fresh Start",
-        duration: "3:28",
+        duration: 208, // 3:28 in seconds
         addedAt: "2024-06-10",
         isLiked: false,
         coverImage: "/api/placeholder/64/64",
+        coverUrl: "",
+        releaseDate: "2024-07-01",
+        genre: "Indie",
+        playCount: 450000,
+        lyrics:
+          "A new beginning starts today\nWith every step I find my way\nThe past is gone, the future's bright\nI'm ready for this new light",
       },
     ],
   });
@@ -335,7 +361,8 @@ export default function PlaylistDetail() {
             {filteredSongs.map((song, index) => (
               <div
                 key={song.id}
-                className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group"
+                className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group cursor-pointer"
+                onClick={() => openDrawer(song)}
               >
                 {/* Track Number */}
                 <div className="w-8 text-center text-spotify-text-gray text-sm">
@@ -371,7 +398,8 @@ export default function PlaylistDetail() {
 
                 {/* Duration */}
                 <div className="text-spotify-text-gray text-sm">
-                  {formatDuration(song.duration)}
+                  {Math.floor(song.duration / 60)}:
+                  {(song.duration % 60).toString().padStart(2, "0")}
                 </div>
 
                 {/* Actions */}

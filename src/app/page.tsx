@@ -94,9 +94,7 @@ export default function Home() {
               <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg hover:shadow-spotify-green/30 transition-all duration-300 hover:scale-110">
                 <span className="text-black font-bold text-lg">S</span>
               </div>
-              <h1 className="text-3xl font-bold text-gradient">
-                Spotify Clone
-              </h1>
+              <h1 className="text-3xl font-bold text-gradient">Sublime</h1>
             </div>
             <div className="text-spotify-text-gray text-lg font-medium">
               Choose your role to continue
@@ -109,7 +107,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="text-center mb-12 animate-fade-in-up">
           <h2 className="text-5xl font-bold mb-6 text-gradient">
-            Welcome to Spotify Clone
+            Welcome to Sublime
           </h2>
           <p className="text-xl text-spotify-text-gray max-w-2xl mx-auto leading-relaxed">
             Experience music like never before. Choose your role to access the
@@ -182,18 +180,10 @@ export default function Home() {
         {/* Auth Links */}
         <div className="text-center mt-8 animate-fade-in-up">
           <div className="flex justify-center gap-4">
-            <Button
-              variant="spotifySecondary"
-              asChild
-              className="px-6 py-3"
-            >
+            <Button variant="spotifySecondary" asChild className="px-6 py-3">
               <a href="/login">Sign In</a>
             </Button>
-            <Button
-              variant="spotify"
-              asChild
-              className="px-6 py-3"
-            >
+            <Button variant="spotify" asChild className="px-6 py-3">
               <a href="/register">Sign Up</a>
             </Button>
           </div>

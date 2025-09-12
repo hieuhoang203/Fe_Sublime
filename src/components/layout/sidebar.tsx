@@ -76,7 +76,7 @@ export function Sidebar({ userType }: SidebarProps) {
           <div className="w-8 h-8 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center shadow-lg">
             <span className="text-black font-bold text-sm">S</span>
           </div>
-          <h1 className="text-2xl font-bold text-gradient">Spotify Clone</h1>
+          <h1 className="text-2xl font-bold text-gradient">Sublime</h1>
         </div>
       </div>
 

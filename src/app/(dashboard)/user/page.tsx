@@ -1,6 +1,7 @@
 "use client";
 
 import { MainLayout } from "@/components/layout/main-layout";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Play,
   Heart,
@@ -20,38 +22,64 @@ import {
 } from "lucide-react";
 
 export default function UserDashboard() {
+  const { openDrawer } = useSongDrawer();
+
   const recentlyPlayed = [
     {
-      id: 1,
+      id: "1",
       title: "Summer Vibes",
       artist: "John Doe",
       album: "Summer Collection",
-      duration: "3:45",
-      cover: "🎵",
+      duration: 225, // 3:45 in seconds
+      coverUrl: "",
+      isLiked: false,
+      releaseDate: "2024-06-15",
+      genre: "Pop",
+      playCount: 1250000,
+      lyrics:
+        "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
     },
     {
-      id: 2,
+      id: "2",
       title: "Midnight Dreams",
       artist: "Jane Smith",
       album: "Night Songs",
-      duration: "4:12",
-      cover: "🌙",
+      duration: 252, // 4:12 in seconds
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-05-20",
+      genre: "R&B",
+      playCount: 890000,
+      lyrics:
+        "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
     },
     {
-      id: 3,
+      id: "3",
       title: "City Lights",
       artist: "Mike Johnson",
       album: "Urban Stories",
-      duration: "3:28",
-      cover: "🏙️",
+      duration: 208, // 3:28 in seconds
+      coverUrl: "",
+      isLiked: false,
+      releaseDate: "2024-04-10",
+      genre: "Hip-Hop",
+      playCount: 2100000,
+      lyrics:
+        "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
     },
     {
-      id: 4,
+      id: "4",
       title: "Ocean Waves",
       artist: "Sarah Wilson",
       album: "Nature Sounds",
-      duration: "5:15",
-      cover: "🌊",
+      duration: 315, // 5:15 in seconds
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-03-25",
+      genre: "Ambient",
+      playCount: 450000,
+      lyrics:
+        "Ocean waves crash against the shore\nNature's symphony forevermore\nIn the rhythm of the sea\nI find my peace and harmony",
     },
   ];
 
@@ -172,40 +200,61 @@ export default function UserDashboard() {
               {recentlyPlayed.map((song, index) => (
                 <div
                   key={song.id}
-                  className="flex items-center gap-4 p-4 hover:bg-gradient-to-r hover:from-spotify-light-gray/50 hover:to-spotify-gray/50 transition-all duration-300 group animate-slide-in-left"
+                  className="flex items-center gap-4 p-4 hover:bg-spotify-light-gray/30 transition-colors cursor-pointer group animate-slide-in-left"
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => openDrawer(song)}
                 >
-                  <div className="text-3xl group-hover:scale-110 transition-transform duration-300">
-                    {song.cover}
-                  </div>
+                  <Avatar className="w-14 h-14">
+                    <AvatarImage src={song.coverUrl} />
+                    <AvatarFallback className="bg-gradient-to-br from-spotify-green to-spotify-green-hover text-black text-lg font-bold">
+                      {song.title.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-white truncate text-lg group-hover:text-gradient transition-all duration-300">
+                    <h4 className="text-white text-base font-medium truncate">
                       {song.title}
-                    </h3>
-                    <p className="text-sm text-spotify-text-gray truncate group-hover:text-white transition-colors duration-300">
+                    </h4>
+                    <p className="text-spotify-text-gray text-sm truncate">
                       {song.artist} • {song.album}
                     </p>
                   </div>
+
                   <div className="flex items-center gap-4">
-                    <span className="text-sm text-spotify-text-gray group-hover:text-white transition-colors duration-300 font-medium">
-                      {song.duration}
+                    <span className="text-spotify-text-gray text-sm">
+                      {Math.floor(song.duration / 60)}:
+                      {(song.duration % 60).toString().padStart(2, "0")}
                     </span>
-                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-white/70 hover:scale-110 hover:text-red-400 transition-all duration-300"
-                      >
-                        <Heart className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-white/70 hover:scale-110 hover:text-white transition-all duration-300"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </div>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 text-spotify-text-gray hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Play className="h-5 w-5" />
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-10 w-10 transition-opacity opacity-0 group-hover:opacity-100 ${
+                        song.isLiked
+                          ? "text-spotify-green hover:text-spotify-green-hover"
+                          : "text-spotify-text-gray hover:text-white"
+                      }`}
+                    >
+                      <Heart
+                        className={`h-5 w-5 ${song.isLiked && "fill-current"}`}
+                      />
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 text-spotify-text-gray hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <MoreHorizontal className="h-5 w-5" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -216,9 +265,7 @@ export default function UserDashboard() {
 
       {/* Top Artists */}
       <div>
-        <h2 className="text-2xl font-bold text-white mb-4">
-          Your Top Artists
-        </h2>
+        <h2 className="text-2xl font-bold text-white mb-4">Your Top Artists</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {topArtists.map((artist) => (
             <Card

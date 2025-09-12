@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Music,
   Album,
@@ -20,6 +21,7 @@ import {
 } from "lucide-react";
 
 export default function ArtistDashboard() {
+  const { openDrawer } = useSongDrawer();
   const stats = [
     {
       title: "Total Songs",
@@ -53,32 +55,68 @@ export default function ArtistDashboard() {
 
   const recentSongs = [
     {
-      id: 1,
+      id: "1",
       title: "Summer Vibes",
       album: "Summer Collection",
       plays: "45,234",
       status: "Published",
+      artist: "You",
+      duration: 225, // 3:45 in seconds
+      coverUrl: "",
+      isLiked: false,
+      releaseDate: "2024-06-15",
+      genre: "Pop",
+      playCount: 45234,
+      lyrics:
+        "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
     },
     {
-      id: 2,
+      id: "2",
       title: "Midnight Dreams",
       album: "Night Songs",
       plays: "32,156",
       status: "Published",
+      artist: "You",
+      duration: 252, // 4:12 in seconds
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-05-20",
+      genre: "Electronic",
+      playCount: 32156,
+      lyrics:
+        "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
     },
     {
-      id: 3,
+      id: "3",
       title: "New Beginning",
       album: "Fresh Start",
       plays: "28,901",
       status: "Pending",
+      artist: "You",
+      duration: 208, // 3:28 in seconds
+      coverUrl: "",
+      isLiked: false,
+      releaseDate: "2024-07-01",
+      genre: "Indie",
+      playCount: 28901,
+      lyrics:
+        "A new beginning starts today\nWith every step I find my way\nThe past is gone, the future's bright\nI'm ready for this new light",
     },
     {
-      id: 4,
+      id: "4",
       title: "City Lights",
       album: "Urban Stories",
       plays: "67,432",
       status: "Published",
+      artist: "You",
+      duration: 235, // 3:55 in seconds
+      coverUrl: "",
+      isLiked: true,
+      releaseDate: "2024-04-10",
+      genre: "Hip-Hop",
+      playCount: 67432,
+      lyrics:
+        "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
     },
   ];
 
@@ -166,8 +204,9 @@ export default function ArtistDashboard() {
               {recentSongs.map((song, index) => (
                 <div
                   key={song.id}
-                  className="flex items-center justify-between p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group animate-slide-in-left"
+                  className="flex items-center justify-between p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group animate-slide-in-left cursor-pointer"
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => openDrawer(song)}
                 >
                   <div className="flex-1">
                     <p className="text-sm font-bold text-white group-hover:text-gradient transition-all duration-300">
@@ -265,9 +304,7 @@ export default function ArtistDashboard() {
             >
               <Music className="h-6 w-6 text-blue-400 mb-2" />
               <p className="text-sm font-medium text-white">Manage Songs</p>
-              <p className="text-xs text-spotify-text-gray">
-                Edit your tracks
-              </p>
+              <p className="text-xs text-spotify-text-gray">Edit your tracks</p>
             </a>
             <a
               href="/artist/albums"

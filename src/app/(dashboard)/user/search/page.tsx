@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSongDrawer } from "@/contexts/song-drawer-context";
 import {
   Search,
   Play,
@@ -28,32 +29,54 @@ export default function UserSearch() {
   const [activeTab, setActiveTab] = useState<
     "all" | "songs" | "artists" | "albums" | "playlists"
   >("all");
+  const { openDrawer } = useSongDrawer();
 
   const searchResults = {
     songs: [
       {
-        id: 1,
+        id: "1",
         title: "Summer Vibes",
         artist: "John Doe",
         album: "Summer Collection",
-        duration: "3:45",
+        duration: 225, // 3:45 in seconds
         cover: "🎵",
+        coverUrl: "",
+        isLiked: false,
+        releaseDate: "2024-06-15",
+        genre: "Pop",
+        playCount: 1250000,
+        lyrics:
+          "Summer vibes are calling me\nTo the beach where I want to be\nWaves are crashing on the shore\nThis is what I'm living for",
       },
       {
-        id: 2,
+        id: "2",
         title: "Midnight Dreams",
         artist: "Jane Smith",
         album: "Night Songs",
-        duration: "4:12",
+        duration: 252, // 4:12 in seconds
         cover: "🌙",
+        coverUrl: "",
+        isLiked: true,
+        releaseDate: "2024-05-20",
+        genre: "R&B",
+        playCount: 890000,
+        lyrics:
+          "In the midnight hour\nWhen the world is still\nI close my eyes and dream\nOf a love that's real",
       },
       {
-        id: 3,
+        id: "3",
         title: "City Lights",
         artist: "Mike Johnson",
         album: "Urban Stories",
-        duration: "3:28",
+        duration: 208, // 3:28 in seconds
         cover: "🏙️",
+        coverUrl: "",
+        isLiked: false,
+        releaseDate: "2024-04-10",
+        genre: "Hip-Hop",
+        playCount: 2100000,
+        lyrics:
+          "City lights shining bright\nIn the urban jungle tonight\nConcrete dreams and neon signs\nThis is where my story begins",
       },
     ],
     artists: [
@@ -216,7 +239,8 @@ export default function UserSearch() {
             {searchResults.songs.map((song) => (
               <div
                 key={song.id}
-                className="flex items-center gap-4 p-4 bg-spotify-light-gray rounded-lg hover:bg-spotify-hover transition-colors group"
+                className="flex items-center gap-4 p-4 bg-spotify-light-gray rounded-lg hover:bg-spotify-hover transition-colors group cursor-pointer"
+                onClick={() => openDrawer(song)}
               >
                 <div className="text-2xl">{song.cover}</div>
                 <div className="flex-1 min-w-0">
@@ -229,7 +253,8 @@ export default function UserSearch() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-spotify-text-gray">
-                    {song.duration}
+                    {Math.floor(song.duration / 60)}:
+                    {(song.duration % 60).toString().padStart(2, "0")}
                   </span>
                   <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Button
