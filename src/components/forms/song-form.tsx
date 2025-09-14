@@ -15,6 +15,7 @@ import {
   FormTextarea,
   FormSelect,
   FormFileUpload,
+  FormDatePicker,
   FormSubmit,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -282,6 +283,12 @@ export function SongForm({
                 />
               </FormField>
 
+              <FormDatePicker
+                label="Release Date"
+                value={formData.releaseDate || ""}
+                onChange={(value) => handleInputChange("releaseDate", value)}
+              />
+
               <FormField label="Album">
                 {albums.length > 0 ? (
                   <FormSelect
@@ -304,17 +311,6 @@ export function SongForm({
                   placeholder="MM:SS (e.g., 3:45)"
                   value={formData.duration}
                   onChange={(value) => handleInputChange("duration", value)}
-                />
-              </FormField>
-
-              <FormField label="Release Date">
-                <input
-                  type="date"
-                  value={formData.releaseDate || ""}
-                  onChange={(e) =>
-                    handleInputChange("releaseDate", e.target.value)
-                  }
-                  className="enhanced-date-picker w-full"
                 />
               </FormField>
             </div>

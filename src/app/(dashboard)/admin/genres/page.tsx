@@ -271,7 +271,7 @@ export default function AdminGenres() {
                 placeholder="Search genres..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-spotify-light-gray border-spotify-text-gray focus:border-spotify-green"
+                className="pl-10 pr-4 bg-spotify-light-gray border-spotify-text-gray focus:border-spotify-green"
               />
             </div>
           </div>

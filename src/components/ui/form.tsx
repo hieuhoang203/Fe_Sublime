@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { DatePicker } from "./date-picker";
 import { Input } from "./input";
 import { Button } from "./button";
 
@@ -46,6 +47,17 @@ interface FormFileUploadProps {
   disabled?: boolean;
   className?: string;
   children?: React.ReactNode;
+}
+
+interface FormDatePickerProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  label?: string;
+  error?: string;
+  required?: boolean;
 }
 
 const FormField = ({
@@ -234,11 +246,36 @@ const FormSubmit = ({
   );
 };
 
+const FormDatePicker = ({
+  value,
+  onChange,
+  placeholder,
+  disabled,
+  className,
+  label,
+  error,
+  required,
+}: FormDatePickerProps) => {
+  return (
+    <DatePicker
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={className}
+      label={label}
+      error={error}
+      required={required}
+    />
+  );
+};
+
 export {
   FormField,
   FormInput,
   FormTextarea,
   FormSelect,
   FormFileUpload,
+  FormDatePicker,
   FormSubmit,
 };
