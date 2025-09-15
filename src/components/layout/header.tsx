@@ -38,7 +38,7 @@ export function Header({ userType }: HeaderProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/70 z-10" />
             <Input
               placeholder="What do you want to listen to?"
-              className="spotify-input h-12 text-lg w-full"
+              className="spotify-input h-12 text-lg w-full pl-12"
             />
           </div>
         </div>

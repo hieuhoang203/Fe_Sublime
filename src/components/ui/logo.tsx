@@ -28,12 +28,12 @@ export function Logo({ size = "md", showText = true, className }: LogoProps) {
     <div className={cn("flex items-center gap-3", className)}>
       <div
         className={cn(
-          "bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-teal-400/30",
+          "bg-gradient-to-br from-gray-900 to-purple-900 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-yellow-300/20",
           sizeClasses[size]
         )}
       >
         <Image
-          src="/vercel.svg"
+          src="/logo.png"
           alt="Sublime Logo"
           width={
             size === "sm" ? 16 : size === "md" ? 20 : size === "lg" ? 24 : 28
@@ -44,6 +44,7 @@ export function Logo({ size = "md", showText = true, className }: LogoProps) {
           className="text-black"
         />
       </div>
+
       {showText && (
         <h1 className={cn("font-bold text-gradient", textSizeClasses[size])}>
           Sublime

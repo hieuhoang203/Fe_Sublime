@@ -263,7 +263,7 @@
 
   /* Override Tailwind classes */
   .spotify-input.pl-12 {
-    padding-left: 2.5rem !important;
+    padding-left: 3.5rem !important;
   }
 
   .spotify-input.pl-10 {
@@ -277,11 +277,69 @@
     font-size: 16px !important;
   }
 
+  /* Hide number input spinners for better design */
+  .enhanced-input[type="number"]::-webkit-outer-spin-button,
+  .enhanced-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .enhanced-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* Custom number input styling */
+  .enhanced-input[type="number"] {
+    background-image: none;
+  }
+
   /* Form input for consistent height */
   .form-input {
     height: 48px !important;
     padding: 12px 16px !important;
     font-size: 16px !important;
+  }
+
+  /* Hide number input spinners for form-input */
+  .form-input[type="number"]::-webkit-outer-spin-button,
+  .form-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .form-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* Custom number input styling for form-input */
+  .form-input[type="number"] {
+    background-image: none;
+  }
+
+  /* Global number input spinner removal */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* Ensure consistent styling for all number inputs */
+  input[type="number"] {
+    background-image: none !important;
+  }
+
+  /* Fix search input placeholder spacing */
+  input[placeholder*="What do you want to listen to?"] {
+    padding-left: 3.5rem !important;
+  }
+
+  /* General search input spacing fix */
+  .relative input[class*="pl-"] {
+    padding-left: 3.5rem !important;
   }
 
 /* Form input with icon spacing */

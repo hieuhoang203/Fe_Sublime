@@ -442,7 +442,7 @@ export default function UserSearch() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="What do you want to listen to?"
-              className="pl-12 pr-4 bg-spotify-light-gray border border-spotify-light-gray text-white placeholder:text-spotify-text-gray text-lg h-12 w-full focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20"
+              className="pl-14 pr-4 bg-spotify-light-gray border border-spotify-light-gray text-white placeholder:text-spotify-text-gray text-lg h-12 w-full focus:border-spotify-green focus:ring-2 focus:ring-spotify-green/20"
             />
           </div>
         </div>
