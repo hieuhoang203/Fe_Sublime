@@ -105,6 +105,7 @@ const FormInput = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
+      min={type === "number" ? 0 : undefined}
       className={cn(
         "enhanced-input form-input bg-black border-0 text-white placeholder:text-spotify-text-gray focus:ring-2 focus:ring-spotify-green focus:outline-none",
         className
