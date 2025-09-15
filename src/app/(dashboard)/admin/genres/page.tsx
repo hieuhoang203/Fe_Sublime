@@ -174,6 +174,10 @@ export default function AdminGenres() {
       description: `Are you sure you want to delete "${genre.name}"? This action cannot be undone.`,
       confirmText: "Delete",
       cancelText: "Cancel",
+      onConfirm: () => {
+        // Delete logic will be handled here
+        console.log("Deleting genre:", genreId);
+      },
     });
 
     if (!confirmed) return;
@@ -234,7 +238,7 @@ export default function AdminGenres() {
             onSubmit={editingGenre ? handleUpdateGenre : handleCreateGenre}
             onCancel={handleCancelForm}
             loading={loading}
-            error={error}
+            error={error || undefined}
           />
         </div>
       </div>

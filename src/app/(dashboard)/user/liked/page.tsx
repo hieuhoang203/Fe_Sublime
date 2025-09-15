@@ -361,7 +361,11 @@ export default function LikedSongs() {
               <div
                 key={song.id}
                 className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group cursor-pointer"
-                onClick={() => openDrawer(song)}
+                onClick={() => openDrawer({
+                  ...song,
+                  album: song.album || "Unknown Album",
+                  duration: song.duration
+                })}
               >
                 {/* Track Number */}
                 <div className="w-8 text-center text-spotify-text-gray text-sm">

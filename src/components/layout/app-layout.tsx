@@ -98,7 +98,7 @@ function AppLayoutContent({
         }`}
       >
         <MusicPlayer
-          currentSong={musicPlayer.currentSong}
+          currentSong={musicPlayer.currentSong || undefined}
           isPlaying={musicPlayer.isPlaying}
           volume={musicPlayer.volume}
           isMuted={musicPlayer.isMuted}

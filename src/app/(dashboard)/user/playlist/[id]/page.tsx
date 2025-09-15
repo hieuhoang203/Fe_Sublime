@@ -44,6 +44,11 @@ interface Song {
   addedAt: string;
   isLiked: boolean;
   coverImage?: string;
+  coverUrl?: string;
+  releaseDate?: string;
+  genre?: string;
+  playCount?: number;
+  lyrics?: string;
 }
 
 interface Playlist {
@@ -95,7 +100,7 @@ export default function PlaylistDetail() {
         title: "Summer Vibes",
         artist: "Current Artist",
         album: "Summer Collection",
-        duration: 225, // 3:45 in seconds
+        duration: "3:45",
         addedAt: "2024-06-20",
         isLiked: true,
         coverImage: "/api/placeholder/64/64",
@@ -111,7 +116,7 @@ export default function PlaylistDetail() {
         title: "Midnight Dreams",
         artist: "Another Artist",
         album: "Night Songs",
-        duration: 252, // 4:12 in seconds
+        duration: "4:12",
         addedAt: "2024-06-18",
         isLiked: false,
         coverImage: "/api/placeholder/64/64",
@@ -127,7 +132,7 @@ export default function PlaylistDetail() {
         title: "City Lights",
         artist: "Urban Artist",
         album: "Urban Stories",
-        duration: 235, // 3:55 in seconds
+        duration: "3:55",
         addedAt: "2024-06-15",
         isLiked: true,
         coverImage: "/api/placeholder/64/64",
@@ -143,7 +148,7 @@ export default function PlaylistDetail() {
         title: "New Beginning",
         artist: "Indie Artist",
         album: "Fresh Start",
-        duration: 208, // 3:28 in seconds
+        duration: "3:28",
         addedAt: "2024-06-10",
         isLiked: false,
         coverImage: "/api/placeholder/64/64",
@@ -362,7 +367,11 @@ export default function PlaylistDetail() {
               <div
                 key={song.id}
                 className="flex items-center gap-4 p-4 bg-gradient-to-r from-spotify-light-gray/50 to-spotify-gray/50 rounded-xl hover:from-spotify-light-gray hover:to-spotify-gray transition-all duration-300 group cursor-pointer"
-                onClick={() => openDrawer(song)}
+                onClick={() => openDrawer({
+                  ...song,
+                  album: song.album || "Unknown Album",
+                  duration: typeof song.duration === 'string' ? parseInt(song.duration.split(':')[0]) * 60 + parseInt(song.duration.split(':')[1]) : song.duration
+                })}
               >
                 {/* Track Number */}
                 <div className="w-8 text-center text-spotify-text-gray text-sm">
@@ -398,8 +407,7 @@ export default function PlaylistDetail() {
 
                 {/* Duration */}
                 <div className="text-spotify-text-gray text-sm">
-                  {Math.floor(song.duration / 60)}:
-                  {(song.duration % 60).toString().padStart(2, "0")}
+                  {song.duration}
                 </div>
 
                 {/* Actions */}

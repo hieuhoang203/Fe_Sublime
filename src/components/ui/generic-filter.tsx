@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormInput, FormSelect } from "@/components/ui/form";
+import { DatePicker } from "@/components/ui/date-picker";
 import { X, Filter, Search } from "lucide-react";
 
 export interface FilterField {
@@ -84,7 +85,7 @@ export function GenericFilter({
       case "select":
         return <FormSelect {...commonProps} options={field.options || []} />;
       case "date":
-        return <FormInput {...commonProps} type="date" />;
+        return <DatePicker {...commonProps} />;
       case "number":
         return <FormInput {...commonProps} type="number" />;
       default:

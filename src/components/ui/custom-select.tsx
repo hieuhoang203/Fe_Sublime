@@ -150,7 +150,9 @@ export function CustomSelect({
             return (
               <div
                 key={option.value}
-                ref={(el) => (optionRefs.current[index] = el)}
+                ref={(el) => {
+                  optionRefs.current[index] = el;
+                }}
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200",
                   isSelected && "bg-spotify-green text-black font-medium",

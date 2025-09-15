@@ -25,6 +25,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     const [calendarPosition, setCalendarPosition] = React.useState<'left' | 'right'>('right');
 
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
     const calendarRef = React.useRef<HTMLDivElement>(null);
 
     // Format date for display (mm/dd/yyyy)
@@ -249,7 +250,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
           {/* Calendar toggle button */}
           <button
-            ref={inputRef}
+            ref={buttonRef}
             type="button"
             onClick={() => {
               calculatePosition();

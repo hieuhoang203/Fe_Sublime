@@ -30,21 +30,26 @@ import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 interface Song {
   id: string;
   title: string;
-  album?: string;
+  artist: string;
+  album: string;
   genre: string;
-  duration: string;
+  duration: number;
   status: "draft" | "pending" | "approved" | "rejected";
   plays: number;
   releaseDate?: string;
   coverImage?: string;
   audioFile?: string;
+  coverUrl?: string;
+  isLiked?: boolean;
+  playCount?: number;
+  lyrics?: string;
 }
 
 export default function ArtistSongs() {
   const { confirm, ConfirmDialog } = useConfirmDialog();
   const { openDrawer } = useSongDrawer();
   const [showSongForm, setShowSongForm] = useState(false);
-  const [editingSong, setEditingSong] = useState<Song | null>(null);
+  const [editingSong, setEditingSong] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
@@ -53,6 +58,7 @@ export default function ArtistSongs() {
     {
       id: "1",
       title: "Summer Vibes",
+      artist: "John Doe",
       album: "Summer Collection",
       genre: "Pop",
       duration: 225, // 3:45 in seconds
@@ -69,6 +75,7 @@ export default function ArtistSongs() {
     {
       id: "2",
       title: "Midnight Dreams",
+      artist: "John Doe",
       album: "Night Songs",
       genre: "Electronic",
       duration: 252, // 4:12 in seconds
@@ -85,6 +92,7 @@ export default function ArtistSongs() {
     {
       id: "3",
       title: "New Beginning",
+      artist: "John Doe",
       album: "Fresh Start",
       genre: "Indie",
       duration: 208, // 3:28 in seconds
@@ -101,6 +109,7 @@ export default function ArtistSongs() {
     {
       id: "4",
       title: "City Lights",
+      artist: "John Doe",
       album: "Urban Stories",
       genre: "Hip Hop",
       duration: 235, // 3:55 in seconds
@@ -132,8 +141,19 @@ export default function ArtistSongs() {
   };
 
   const handleEditSong = (song: Song) => {
-    setEditingSong(song);
+    // Convert Song to SongFormData format
+    const songFormData = {
+      ...song,
+      duration: formatDuration(song.duration), // Convert number to string
+    };
+    setEditingSong(songFormData as any);
     setShowSongForm(true);
+  };
+
+  const formatDuration = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleDeleteSong = async (songId: string) => {
@@ -400,7 +420,10 @@ export default function ArtistSongs() {
         open={showSongForm}
         onOpenChange={setShowSongForm}
         onSubmit={handleSongSubmit}
-        initialData={editingSong || undefined}
+        initialData={editingSong ? {
+          ...editingSong,
+          duration: typeof editingSong.duration === 'number' ? formatDuration(editingSong.duration) : editingSong.duration
+        } : undefined}
         loading={false}
         artists={[{ id: "current-artist", name: "Current Artist" }]}
         albums={[
