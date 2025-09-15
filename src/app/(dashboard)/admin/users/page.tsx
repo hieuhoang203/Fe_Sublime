@@ -22,13 +22,19 @@ import {
   UserCheck,
   UserX,
   Plus,
+  Download,
 } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function AdminUsers() {
   const [userFormOpen, setUserFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+
+  // Debug useEffect
+  React.useEffect(() => {
+    console.log("userFormOpen state changed to:", userFormOpen);
+  }, [userFormOpen]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<Record<string, string>>(
     {}
@@ -142,8 +148,41 @@ export default function AdminUsers() {
   };
 
   const handleAddUser = () => {
+    console.log("Add User button clicked");
     setEditingUser(null);
     setUserFormOpen(true);
+    console.log("userFormOpen set to:", true);
+  };
+
+  const handleExportUsers = () => {
+    console.log("Export Users button clicked");
+    // Create CSV content
+    const csvContent = [
+      ["Name", "Email", "Role", "Status", "Join Date"],
+      ...users.map((user) => [
+        user.name,
+        user.email,
+        user.role,
+        user.status,
+        user.joinDate || "N/A",
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `users_export_${new Date().toISOString().split("T")[0]}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleDeleteUser = async (userId: string) => {
@@ -222,9 +261,9 @@ export default function AdminUsers() {
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
-          <Button variant="spotify" size="sm">
-            <Users className="h-4 w-4 mr-2" />
-            Add User
+          <Button variant="spotify" size="sm" onClick={handleExportUsers}>
+            <Download className="h-4 w-4 mr-2" />
+            Export Users
           </Button>
         </div>
       </div>

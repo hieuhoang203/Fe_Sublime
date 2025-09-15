@@ -60,6 +60,7 @@ export function UserForm({
   initialData,
   loading = false,
 }: UserFormProps) {
+  console.log("UserForm rendered with open:", open);
   const [formData, setFormData] = React.useState<UserFormData>({
     name: "",
     email: "",
