@@ -167,7 +167,7 @@ export function ArtistForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center">
@@ -202,7 +202,7 @@ export function ArtistForm({
           </div>
 
           {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FormField label="Artist Name" required error={errors.name}>
               <FormInput
                 placeholder="Enter artist name"
@@ -259,7 +259,7 @@ export function ArtistForm({
           </div>
 
           {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FormField label="Followers">
               <FormInput
                 type="number"
@@ -296,7 +296,7 @@ export function ArtistForm({
           {/* Social Links */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Social Links</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Instagram">
                 <FormInput
                   placeholder="https://instagram.com/username"

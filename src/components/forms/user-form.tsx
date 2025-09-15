@@ -125,7 +125,7 @@ export function UserForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center">
@@ -160,7 +160,7 @@ export function UserForm({
           </div>
 
           {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FormField label="Full Name" required error={errors.name}>
               <FormInput
                 placeholder="Enter full name"
@@ -197,7 +197,7 @@ export function UserForm({
           </div>
 
           {/* Role and Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FormField label="Role" required>
               <FormSelect
                 value={formData.role}

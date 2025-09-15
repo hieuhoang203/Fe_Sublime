@@ -94,6 +94,7 @@ export function SongForm({
   const [errors, setErrors] = React.useState<Partial<SongFormData>>({});
   const [audioFile, setAudioFile] = React.useState<File | null>(null);
   const [coverFile, setCoverFile] = React.useState<File | null>(null);
+  const [showCustomArtist, setShowCustomArtist] = React.useState(false);
 
   React.useEffect(() => {
     if (initialData) {
@@ -149,19 +150,25 @@ export function SongForm({
     }
   };
 
-  const artistOptions = artists.map((artist) => ({
-    value: artist.id,
-    label: artist.name,
-  }));
+  const artistOptions = [
+    ...artists.map((artist) => ({
+      value: artist.id,
+      label: artist.name,
+    })),
+    { value: "add_new", label: "+ Add New Artist" },
+  ];
 
-  const albumOptions = albums.map((album) => ({
-    value: album.id,
-    label: album.name,
-  }));
+  const albumOptions = [
+    { value: "", label: "No Album" },
+    ...albums.map((album) => ({
+      value: album.id,
+      label: album.name,
+    })),
+  ];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center">
@@ -183,7 +190,7 @@ export function SongForm({
               <Upload className="h-5 w-5" />
               File Uploads
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Audio File" required>
                 <FormFileUpload accept="audio/*" onChange={setAudioFile}>
                   {formData.audioFile ? (
@@ -248,7 +255,7 @@ export function SongForm({
               <Music className="h-5 w-5" />
               Song Information
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Song Title" required error={errors.title}>
                 <FormInput
                   placeholder="Enter song title"
@@ -258,21 +265,48 @@ export function SongForm({
               </FormField>
 
               <FormField label="Artist" required error={errors.artist}>
-                {artists.length > 0 ? (
+                {showCustomArtist ? (
+                  <div className="space-y-2">
+                    <FormInput
+                      placeholder="Enter artist name"
+                      value={formData.artist}
+                      onChange={(value) => handleInputChange("artist", value)}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setShowCustomArtist(false);
+                        handleInputChange("artist", "");
+                      }}
+                      className="text-xs"
+                    >
+                      ← Back to select from list
+                    </Button>
+                  </div>
+                ) : (
                   <FormSelect
                     value={formData.artist}
-                    onChange={(value) => handleInputChange("artist", value)}
+                    onChange={(value) => {
+                      if (value === "add_new") {
+                        setShowCustomArtist(true);
+                        handleInputChange("artist", "");
+                      } else {
+                        handleInputChange("artist", value);
+                      }
+                    }}
                     options={artistOptions}
                     placeholder="Select artist"
                   />
-                ) : (
-                  <FormInput
-                    placeholder="Enter artist name"
-                    value={formData.artist}
-                    onChange={(value) => handleInputChange("artist", value)}
-                  />
                 )}
               </FormField>
+
+              <FormDatePicker
+                label="Release Date"
+                value={formData.releaseDate || ""}
+                onChange={(value) => handleInputChange("releaseDate", value)}
+              />
 
               <FormField label="Genre" required error={errors.genre}>
                 <FormSelect
@@ -283,27 +317,13 @@ export function SongForm({
                 />
               </FormField>
 
-              <FormDatePicker
-                label="Release Date"
-                value={formData.releaseDate || ""}
-                onChange={(value) => handleInputChange("releaseDate", value)}
-              />
-
               <FormField label="Album">
-                {albums.length > 0 ? (
-                  <FormSelect
-                    value={formData.album || ""}
-                    onChange={(value) => handleInputChange("album", value)}
-                    options={albumOptions}
-                    placeholder="Select album (optional)"
-                  />
-                ) : (
-                  <FormInput
-                    placeholder="Enter album name (optional)"
-                    value={formData.album || ""}
-                    onChange={(value) => handleInputChange("album", value)}
-                  />
-                )}
+                <FormSelect
+                  value={formData.album || ""}
+                  onChange={(value) => handleInputChange("album", value)}
+                  options={albumOptions}
+                  placeholder="Select album (optional)"
+                />
               </FormField>
 
               <FormField label="Duration" required error={errors.duration}>
@@ -322,7 +342,7 @@ export function SongForm({
               <Calendar className="h-5 w-5" />
               Additional Information
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Description">
                 <FormTextarea
                   placeholder="Describe the song, its inspiration..."
@@ -364,7 +384,7 @@ export function SongForm({
               <Clock className="h-5 w-5" />
               Status & Preview
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Status" required>
                 <FormSelect
                   value={formData.status}

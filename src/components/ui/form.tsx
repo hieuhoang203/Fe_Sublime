@@ -129,7 +129,7 @@ const FormTextarea = ({
       rows={rows}
       disabled={disabled}
       className={cn(
-        "flex w-full rounded-md border-0 bg-black px-3 py-2 text-sm text-white placeholder:text-spotify-text-gray focus:ring-2 focus:ring-spotify-green focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none transition-all duration-200",
+        "flex w-full rounded-md border-0 bg-spotify-light-gray px-4 py-3 text-base text-white placeholder:text-spotify-text-gray focus:ring-2 focus:ring-spotify-green focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none transition-all duration-200 min-h-[120px]",
         className
       )}
     />

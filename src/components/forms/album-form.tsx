@@ -197,7 +197,7 @@ export function AlbumForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-spotify-green to-spotify-green-hover rounded-full flex items-center justify-center">
@@ -252,7 +252,7 @@ export function AlbumForm({
               <Music className="h-5 w-5" />
               Album Information
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Album Title" required error={errors.title}>
                 <FormInput
                   placeholder="Enter album title"
@@ -269,6 +269,14 @@ export function AlbumForm({
                 />
               </FormField>
 
+              <FormDatePicker
+                label="Release Date"
+                required
+                error={errors.releaseDate}
+                value={formData.releaseDate}
+                onChange={(value) => handleInputChange("releaseDate", value)}
+              />
+
               <FormField label="Genre" required error={errors.genre}>
                 <FormSelect
                   value={formData.genre}
@@ -277,14 +285,6 @@ export function AlbumForm({
                   placeholder="Select genre"
                 />
               </FormField>
-
-              <FormDatePicker
-                label="Release Date"
-                required
-                error={errors.releaseDate}
-                value={formData.releaseDate}
-                onChange={(value) => handleInputChange("releaseDate", value)}
-              />
 
               <FormField label="Total Tracks" error={errors.totalTracks as any}>
                 <FormInput
@@ -313,7 +313,7 @@ export function AlbumForm({
               <Calendar className="h-5 w-5" />
               Additional Details
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Record Label">
                 <FormInput
                   placeholder="Enter record label"
@@ -377,7 +377,7 @@ export function AlbumForm({
               <Music className="h-5 w-5" />
               Tags & Settings
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField label="Tags">
                 <div className="space-y-2">
                   <div className="flex gap-2">
