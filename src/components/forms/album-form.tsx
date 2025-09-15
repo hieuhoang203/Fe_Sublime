@@ -418,20 +418,43 @@ export function AlbumForm({
               </FormField>
 
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="explicit"
-                    checked={formData.explicit || false}
-                    onChange={(e) =>
-                      handleInputChange("explicit", e.target.checked)
-                    }
-                    className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2 focus:ring-spotify-green/20"
-                  />
-                  <label htmlFor="explicit" className="text-sm text-white">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      id="explicit"
+                      checked={formData.explicit || false}
+                      onChange={(e) =>
+                        handleInputChange("explicit", e.target.checked)
+                      }
+                      className="sr-only"
+                    />
+                    <div
+                      className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center group-hover:scale-105 ${
+                        formData.explicit
+                          ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
+                          : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                      }`}
+                    >
+                      {formData.explicit && (
+                        <svg
+                          className="w-3 h-3 text-black"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-sm text-white group-hover:text-spotify-green transition-colors duration-200 font-medium">
                     Contains explicit content
-                  </label>
-                </div>
+                  </span>
+                </label>
               </div>
             </div>
           </div>

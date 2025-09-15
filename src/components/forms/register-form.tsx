@@ -253,7 +253,7 @@ export function RegisterForm({
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`pl-12 !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                className={`form-input-with-icon !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
                   errors.email ? "!border-red-500" : ""
                 }`}
                 style={{
@@ -277,16 +277,14 @@ export function RegisterForm({
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={formData.password}
-                onChange={(e) =>
-                  handleInputChange("confirmPassword", e.target.value)
-                }
-                className={`pl-12 pr-12 bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                className={`form-input-with-icon-right bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
                   errors.password ? "border-red-500" : ""
                 }`}
               />
               <button
                 type="button"
-                onClick={() => setShowConfirmPassword(!showPassword)}
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors"
               >
                 {showPassword ? (
@@ -358,7 +356,7 @@ export function RegisterForm({
                 onChange={(e) =>
                   handleInputChange("confirmPassword", e.target.value)
                 }
-                className={`pl-12 pr-12 bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
+                className={`form-input-with-icon-right bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
                   errors.confirmPassword ? "border-red-500" : ""
                 }`}
               />
@@ -381,27 +379,50 @@ export function RegisterForm({
 
           {/* Terms and Conditions */}
           <div className="space-y-1">
-            <label className="flex items-start space-x-3 cursor-pointer text-sm">
-              <input
-                type="checkbox"
-                checked={formData.agreeToTerms}
-                onChange={(e) =>
-                  handleInputChange("agreeToTerms", e.target.checked)
-                }
-                className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2 focus:ring-spotify-green/20 mt-0.5"
-              />
-              <span className="text-spotify-text-gray">
+            <label className="flex items-start space-x-3 cursor-pointer text-sm group">
+              <div className="relative mt-0.5">
+                <input
+                  type="checkbox"
+                  checked={formData.agreeToTerms}
+                  onChange={(e) =>
+                    handleInputChange("agreeToTerms", e.target.checked)
+                  }
+                  className="sr-only"
+                />
+                <div
+                  className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center group-hover:scale-105 ${
+                    formData.agreeToTerms
+                      ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
+                      : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                  }`}
+                >
+                  {formData.agreeToTerms && (
+                    <svg
+                      className="w-3 h-3 text-black"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <span className="text-spotify-text-gray group-hover:text-white transition-colors duration-200 leading-relaxed">
                 I agree to the{" "}
                 <Link
                   href="/terms"
-                  className="text-spotify-green hover:text-spotify-green-hover"
+                  className="text-spotify-green hover:text-spotify-green-hover font-medium transition-colors"
                 >
                   Terms of Service
                 </Link>{" "}
                 and{" "}
                 <Link
                   href="/privacy"
-                  className="text-spotify-green hover:text-spotify-green-hover"
+                  className="text-spotify-green hover:text-spotify-green-hover font-medium transition-colors"
                 >
                   Privacy Policy
                 </Link>
@@ -435,7 +456,7 @@ export function RegisterForm({
         {/* Divider */}
         <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-spotify-light-gray/30"></div>
+            <div className="w-full border-t border-white/30"></div>
           </div>
           <div className="relative flex justify-center text-xs">
             <span className="px-3 bg-spotify-gray text-spotify-text-gray">

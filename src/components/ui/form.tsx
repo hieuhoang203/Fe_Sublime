@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { DatePicker } from "./date-picker";
 import { Input } from "./input";
 import { Button } from "./button";
+import { CustomSelect } from "./custom-select";
 
 interface FormFieldProps {
   label: string;
@@ -35,10 +36,15 @@ interface FormTextareaProps {
 interface FormSelectProps {
   value: string;
   onChange: (value: string) => void;
-  options: Array<{ value: string; label: string }>;
+  options: Array<{
+    value: string;
+    label: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }>;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  error?: boolean;
 }
 
 interface FormFileUploadProps {
@@ -137,31 +143,18 @@ const FormSelect = ({
   placeholder,
   disabled,
   className,
+  error,
 }: FormSelectProps) => {
   return (
-    <div className="custom-select-wrapper">
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        className={cn("enhanced-select w-full", className)}
-      >
-        {placeholder && (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        )}
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-            className="bg-spotify-light-gray text-white"
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <CustomSelect
+      value={value}
+      onChange={onChange}
+      options={options}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={className}
+      error={error}
+    />
   );
 };
 
@@ -259,7 +252,7 @@ const FormDatePicker = ({
   return (
     <DatePicker
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
       className={className}

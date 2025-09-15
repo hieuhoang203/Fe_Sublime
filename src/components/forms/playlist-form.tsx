@@ -199,44 +199,94 @@ export function PlaylistForm({
             <h4 className="text-white font-medium">Privacy Settings</h4>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-spotify-light-gray/50 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-spotify-light-gray/50 rounded-lg group hover:bg-spotify-light-gray/70 transition-colors duration-200">
                 <div className="flex items-center gap-3">
-                  <Globe className="h-5 w-5 text-spotify-text-gray" />
+                  <Globe className="h-5 w-5 text-spotify-text-gray group-hover:text-spotify-green transition-colors duration-200" />
                   <div>
-                    <p className="text-white font-medium">Make Public</p>
-                    <p className="text-spotify-text-gray text-sm">
+                    <p className="text-white font-medium group-hover:text-spotify-green transition-colors duration-200">
+                      Make Public
+                    </p>
+                    <p className="text-spotify-text-gray text-sm group-hover:text-white transition-colors duration-200">
                       Anyone can find and play this playlist
                     </p>
                   </div>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={formData.isPublic}
-                  onChange={(e) =>
-                    handleInputChange("isPublic", e.target.checked)
-                  }
-                  className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2 focus:ring-spotify-green/20"
-                />
+                <label className="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isPublic}
+                    onChange={(e) =>
+                      handleInputChange("isPublic", e.target.checked)
+                    }
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center hover:scale-105 ${
+                      formData.isPublic
+                        ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
+                        : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                    }`}
+                  >
+                    {formData.isPublic && (
+                      <svg
+                        className="w-3 h-3 text-black"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </label>
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-spotify-light-gray/50 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-spotify-light-gray/50 rounded-lg group hover:bg-spotify-light-gray/70 transition-colors duration-200">
                 <div className="flex items-center gap-3">
-                  <Users className="h-5 w-5 text-spotify-text-gray" />
+                  <Users className="h-5 w-5 text-spotify-text-gray group-hover:text-spotify-green transition-colors duration-200" />
                   <div>
-                    <p className="text-white font-medium">Collaborative</p>
-                    <p className="text-spotify-text-gray text-sm">
+                    <p className="text-white font-medium group-hover:text-spotify-green transition-colors duration-200">
+                      Collaborative
+                    </p>
+                    <p className="text-spotify-text-gray text-sm group-hover:text-white transition-colors duration-200">
                       Let others add songs to this playlist
                     </p>
                   </div>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={formData.isCollaborative}
-                  onChange={(e) =>
-                    handleInputChange("isCollaborative", e.target.checked)
-                  }
-                  className="w-4 h-4 text-spotify-green bg-spotify-light-gray border-spotify-light-gray rounded focus:ring-spotify-green focus:ring-2 focus:ring-spotify-green/20"
-                />
+                <label className="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isCollaborative}
+                    onChange={(e) =>
+                      handleInputChange("isCollaborative", e.target.checked)
+                    }
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center hover:scale-105 ${
+                      formData.isCollaborative
+                        ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
+                        : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                    }`}
+                  >
+                    {formData.isCollaborative && (
+                      <svg
+                        className="w-3 h-3 text-black"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </label>
               </div>
             </div>
           </div>
