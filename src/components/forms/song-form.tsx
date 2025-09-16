@@ -106,6 +106,8 @@ export function SongForm({
   const [coverFile, setCoverFile] = React.useState<File | null>(null);
   const [showArtistDropdown, setShowArtistDropdown] = React.useState(false);
   const [artistSearchTerm, setArtistSearchTerm] = React.useState("");
+  const [isArtistSelectFocused, setIsArtistSelectFocused] =
+    React.useState(false);
 
   React.useEffect(() => {
     if (initialData) {
@@ -120,6 +122,7 @@ export function SongForm({
       if (showArtistDropdown && !target.closest(".artist-search-container")) {
         setShowArtistDropdown(false);
         setArtistSearchTerm("");
+        setIsArtistSelectFocused(false);
       }
     };
 
@@ -201,6 +204,8 @@ export function SongForm({
         };
       }
     });
+    // Reset focus state when selecting an artist
+    setIsArtistSelectFocused(false);
   };
 
   const artistOptions = [
@@ -333,7 +338,33 @@ export function SongForm({
                   {/* Searchable Select Display */}
                   <div
                     className="enhanced-select cursor-pointer flex items-center justify-between"
+                    style={{
+                      borderColor:
+                        isArtistSelectFocused || showArtistDropdown
+                          ? "#1db954"
+                          : undefined,
+                      boxShadow:
+                        isArtistSelectFocused || showArtistDropdown
+                          ? "0 0 0 2px #1db954, 0 4px 12px rgba(0, 0, 0, 0.2)"
+                          : undefined,
+                      transform:
+                        isArtistSelectFocused || showArtistDropdown
+                          ? "translateY(-1px)"
+                          : undefined,
+                    }}
                     onClick={() => setShowArtistDropdown(!showArtistDropdown)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setShowArtistDropdown(!showArtistDropdown);
+                      }
+                    }}
+                    onFocus={() => setIsArtistSelectFocused(true)}
+                    onBlur={() => setIsArtistSelectFocused(false)}
+                    tabIndex={0}
+                    role="combobox"
+                    aria-expanded={showArtistDropdown}
+                    aria-haspopup="listbox"
                   >
                     <div className="flex items-center gap-2">
                       {selectedArtists.length === 0 ? (
