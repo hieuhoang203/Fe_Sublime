@@ -36,7 +36,7 @@ interface SongFormData {
   title: string;
   artists: string[];
   album?: string;
-  genre: string;
+  genres: string[];
   duration: string;
   description?: string;
   audioFile?: string;
@@ -94,7 +94,7 @@ export function SongForm({
     title: "",
     artists: [],
     album: "",
-    genre: "",
+    genres: [],
     duration: "",
     description: "",
     status: "draft",
@@ -108,6 +108,9 @@ export function SongForm({
   const [artistSearchTerm, setArtistSearchTerm] = React.useState("");
   const [isArtistSelectFocused, setIsArtistSelectFocused] =
     React.useState(false);
+  const [showGenreDropdown, setShowGenreDropdown] = React.useState(false);
+  const [genreSearchTerm, setGenreSearchTerm] = React.useState("");
+  const [isGenreSelectFocused, setIsGenreSelectFocused] = React.useState(false);
 
   React.useEffect(() => {
     if (initialData) {
@@ -124,13 +127,18 @@ export function SongForm({
         setArtistSearchTerm("");
         setIsArtistSelectFocused(false);
       }
+      if (showGenreDropdown && !target.closest(".genre-search-container")) {
+        setShowGenreDropdown(false);
+        setGenreSearchTerm("");
+        setIsGenreSelectFocused(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showArtistDropdown]);
+  }, [showArtistDropdown, showGenreDropdown]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -143,8 +151,8 @@ export function SongForm({
       newErrors.artists = "At least one artist is required";
     }
 
-    if (!formData.genre.trim()) {
-      newErrors.genre = "Genre is required";
+    if (!formData.genres.length) {
+      newErrors.genres = "At least one genre is required";
     }
 
     if (!formData.duration.trim()) {
@@ -226,6 +234,38 @@ export function SongForm({
   const selectedArtists = artists.filter((artist) =>
     formData.artists.includes(artist.id)
   );
+
+  const selectedGenres = genreOptions.filter((genre) =>
+    formData.genres.includes(genre.value)
+  );
+
+  const filteredGenres = React.useMemo(() => {
+    if (!genreSearchTerm.trim()) return genreOptions;
+    return genreOptions.filter((genre) =>
+      genre.label.toLowerCase().includes(genreSearchTerm.toLowerCase())
+    );
+  }, [genreSearchTerm]);
+
+  const handleGenreToggle = (genreValue: string) => {
+    setFormData((prev) => {
+      const currentGenres = prev.genres || [];
+      const isSelected = currentGenres.includes(genreValue);
+
+      if (isSelected) {
+        return {
+          ...prev,
+          genres: currentGenres.filter((value) => value !== genreValue),
+        };
+      } else {
+        return {
+          ...prev,
+          genres: [...currentGenres, genreValue],
+        };
+      }
+    });
+    // Reset focus state when selecting a genre
+    setIsGenreSelectFocused(false);
+  };
 
   const albumOptions = [
     { value: "", label: "No Album" },
@@ -380,8 +420,8 @@ export function SongForm({
                           <span className="text-white">
                             {selectedArtists[0].name}
                           </span>
-                          <div className="bg-spotify-green/20 text-spotify-green px-2 py-1 rounded-full text-xs font-medium">
-                            +{selectedArtists.length - 1}
+                          <div className="bg-spotify-green text-black text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap">
+                            +{selectedArtists.length - 1} more
                           </div>
                         </div>
                       )}
@@ -444,10 +484,10 @@ export function SongForm({
                                     className="sr-only"
                                   />
                                   <div
-                                    className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center group-hover:scale-105 ${
+                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                                       isSelected
-                                        ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
-                                        : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                                        ? "bg-spotify-green border-spotify-green"
+                                        : "border-spotify-text-gray group-hover:border-spotify-green/50"
                                     }`}
                                   >
                                     {isSelected && (
@@ -465,14 +505,14 @@ export function SongForm({
                                     )}
                                   </div>
                                 </div>
-                                <span className="text-white text-sm">
+                                <span className="text-white group-hover:text-white">
                                   {artist.name}
                                 </span>
                               </label>
                             );
                           })
                         ) : (
-                          <div className="p-3 text-center text-spotify-text-gray text-sm">
+                          <div className="p-3 text-center text-spotify-text-gray">
                             No artists found
                           </div>
                         )}
@@ -488,13 +528,150 @@ export function SongForm({
                 onChange={(value) => handleInputChange("releaseDate", value)}
               />
 
-              <FormField label="Genre" required error={errors.genre}>
-                <FormSelect
-                  value={formData.genre}
-                  onChange={(value) => handleInputChange("genre", value)}
-                  options={genreOptions}
-                  placeholder="Select genre"
-                />
+              <FormField label="Genre" required error={errors.genres}>
+                <div className="relative genre-search-container">
+                  {/* Searchable Select Display */}
+                  <div
+                    className="enhanced-select cursor-pointer flex items-center justify-between"
+                    style={{
+                      borderColor:
+                        isGenreSelectFocused || showGenreDropdown
+                          ? "#1db954"
+                          : undefined,
+                      boxShadow:
+                        isGenreSelectFocused || showGenreDropdown
+                          ? "0 0 0 2px #1db954, 0 4px 12px rgba(0, 0, 0, 0.2)"
+                          : undefined,
+                      transform:
+                        isGenreSelectFocused || showGenreDropdown
+                          ? "translateY(-1px)"
+                          : undefined,
+                    }}
+                    onClick={() => setShowGenreDropdown(!showGenreDropdown)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setShowGenreDropdown(!showGenreDropdown);
+                      }
+                    }}
+                    onFocus={() => setIsGenreSelectFocused(true)}
+                    onBlur={() => setIsGenreSelectFocused(false)}
+                    tabIndex={0}
+                    role="combobox"
+                    aria-expanded={showGenreDropdown}
+                    aria-haspopup="listbox"
+                  >
+                    <div className="flex items-center gap-2">
+                      {selectedGenres.length === 0 ? (
+                        <span className="text-spotify-text-gray">
+                          Select genres
+                        </span>
+                      ) : selectedGenres.length === 1 ? (
+                        <span className="text-white">
+                          {selectedGenres[0].label}
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="text-white">
+                            {selectedGenres[0].label}
+                          </span>
+                          <div className="bg-spotify-green text-black text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap">
+                            +{selectedGenres.length - 1} more
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 text-spotify-text-gray transition-transform ${
+                        showGenreDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+
+                  {showGenreDropdown && (
+                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-lg shadow-xl max-h-60 overflow-hidden">
+                      {/* Search Input */}
+                      <div className="p-3 border-b border-spotify-light-gray">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                          <input
+                            type="text"
+                            placeholder="Search genres..."
+                            value={genreSearchTerm}
+                            onChange={(e) => setGenreSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-lg text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
+                            autoFocus
+                          />
+                          {genreSearchTerm && (
+                            <button
+                              type="button"
+                              onClick={() => setGenreSearchTerm("")}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-spotify-text-gray hover:text-white"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Genres List */}
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredGenres.length > 0 ? (
+                          filteredGenres.map((genre) => {
+                            const isSelected = formData.genres.includes(
+                              genre.value
+                            );
+                            return (
+                              <label
+                                key={genre.value}
+                                className="flex items-center gap-3 p-3 hover:bg-spotify-gray/50 cursor-pointer transition-colors group"
+                              >
+                                <div className="relative">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() =>
+                                      handleGenreToggle(genre.value)
+                                    }
+                                    className="sr-only"
+                                  />
+                                  <div
+                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                                      isSelected
+                                        ? "bg-spotify-green border-spotify-green"
+                                        : "border-spotify-text-gray group-hover:border-spotify-green/50"
+                                    }`}
+                                  >
+                                    {isSelected && (
+                                      <svg
+                                        className="w-3 h-3 text-black"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                    )}
+                                  </div>
+                                </div>
+                                <span className="text-white group-hover:text-white">
+                                  {genre.label}
+                                </span>
+                              </label>
+                            );
+                          })
+                        ) : (
+                          <div className="p-3 text-center text-spotify-text-gray">
+                            No genres found
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </FormField>
 
               <FormField label="Album">

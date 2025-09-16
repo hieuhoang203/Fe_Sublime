@@ -391,8 +391,8 @@ export function AlbumForm({
                           <span className="text-white">
                             {selectedGenres[0].label}
                           </span>
-                          <div className="bg-spotify-green/20 text-spotify-green px-2 py-1 rounded-full text-xs font-medium">
-                            +{selectedGenres.length - 1}
+                          <div className="bg-spotify-green text-black text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap">
+                            +{selectedGenres.length - 1} more
                           </div>
                         </div>
                       )}
@@ -453,10 +453,10 @@ export function AlbumForm({
                                     className="sr-only"
                                   />
                                   <div
-                                    className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center group-hover:scale-105 ${
+                                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                                       isSelected
-                                        ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
-                                        : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                                        ? "bg-spotify-green border-spotify-green"
+                                        : "border-spotify-text-gray group-hover:border-spotify-green/50"
                                     }`}
                                   >
                                     {isSelected && (
@@ -474,14 +474,14 @@ export function AlbumForm({
                                     )}
                                   </div>
                                 </div>
-                                <span className="text-white text-sm">
+                                <span className="text-white group-hover:text-white">
                                   {genre.label}
                                 </span>
                               </label>
                             );
                           })
                         ) : (
-                          <div className="p-3 text-center text-spotify-text-gray text-sm">
+                          <div className="p-3 text-center text-spotify-text-gray">
                             No genres found
                           </div>
                         )}
