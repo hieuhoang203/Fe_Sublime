@@ -377,7 +377,7 @@ export function SongForm({
                 <div className="relative artist-search-container">
                   {/* Searchable Select Display */}
                   <div
-                    className="enhanced-select cursor-pointer flex items-center justify-between"
+                    className="enhanced-input form-input bg-black border-0 text-white placeholder:text-spotify-text-gray focus:ring-2 focus:ring-spotify-green focus:outline-none w-full cursor-pointer flex items-center justify-between rounded-md"
                     style={{
                       borderColor:
                         isArtistSelectFocused || showArtistDropdown
@@ -435,7 +435,7 @@ export function SongForm({
 
                   {/* Searchable Dropdown */}
                   {showArtistDropdown && (
-                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-lg shadow-xl max-h-60 overflow-hidden">
+                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-md shadow-xl max-h-60 overflow-hidden">
                       {/* Search Input */}
                       <div className="p-3 border-b border-spotify-light-gray">
                         <div className="relative">
@@ -447,7 +447,7 @@ export function SongForm({
                             onChange={(e) =>
                               setArtistSearchTerm(e.target.value)
                             }
-                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-lg text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
+                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-md text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
                             autoFocus
                           />
                           {artistSearchTerm && (
@@ -532,7 +532,7 @@ export function SongForm({
                 <div className="relative genre-search-container">
                   {/* Searchable Select Display */}
                   <div
-                    className="enhanced-select cursor-pointer flex items-center justify-between"
+                    className="enhanced-input form-input bg-black border-0 text-white placeholder:text-spotify-text-gray focus:ring-2 focus:ring-spotify-green focus:outline-none w-full cursor-pointer flex items-center justify-between rounded-md"
                     style={{
                       borderColor:
                         isGenreSelectFocused || showGenreDropdown
@@ -589,7 +589,7 @@ export function SongForm({
                   </div>
 
                   {showGenreDropdown && (
-                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-lg shadow-xl max-h-60 overflow-hidden">
+                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-md shadow-xl max-h-60 overflow-hidden">
                       {/* Search Input */}
                       <div className="p-3 border-b border-spotify-light-gray">
                         <div className="relative">
@@ -599,7 +599,7 @@ export function SongForm({
                             placeholder="Search genres..."
                             value={genreSearchTerm}
                             onChange={(e) => setGenreSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-lg text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
+                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-md text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
                             autoFocus
                           />
                           {genreSearchTerm && (

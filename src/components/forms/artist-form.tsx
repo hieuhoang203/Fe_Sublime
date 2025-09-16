@@ -20,11 +20,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Mic, Mail, MapPin, Users, Music, Calendar } from "lucide-react";
+import { ToggleGender } from "@/components/ui/toggle-gender";
 
 interface ArtistFormData {
   id?: string;
   name: string;
   email: string;
+  gender: boolean; // true = Male, false = Female
   status: "active" | "inactive";
   avatar?: string;
   bio?: string;
@@ -61,6 +63,7 @@ export function ArtistForm({
   const [formData, setFormData] = React.useState<ArtistFormData>({
     name: "",
     email: "",
+    gender: true, // true = Male, false = Female
     status: "active",
     bio: "",
     location: "",
@@ -73,7 +76,7 @@ export function ArtistForm({
     ...initialData,
   });
 
-  const [errors, setErrors] = React.useState<Partial<ArtistFormData>>({});
+  const [errors, setErrors] = React.useState<Partial<Record<keyof ArtistFormData, string>>>({});
   const [avatarFile, setAvatarFile] = React.useState<File | null>(null);
 
   React.useEffect(() => {
@@ -83,7 +86,7 @@ export function ArtistForm({
   }, [initialData]);
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<ArtistFormData> = {};
+    const newErrors: Partial<Record<keyof ArtistFormData, string>> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = "Artist name is required";
@@ -93,6 +96,10 @@ export function ArtistForm({
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
+    }
+
+    if (formData.gender === undefined || formData.gender === null) {
+      newErrors.gender = "Gender is required";
     }
 
     setErrors(newErrors);
@@ -112,7 +119,7 @@ export function ArtistForm({
 
   const handleInputChange = (
     field: keyof ArtistFormData,
-    value: string | number
+    value: string | number | boolean
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -189,6 +196,13 @@ export function ArtistForm({
                 placeholder="Enter email address"
                 value={formData.email}
                 onChange={(value) => handleInputChange("email", value)}
+              />
+            </FormField>
+
+            <FormField label="Gender" required error={errors.gender}>
+              <ToggleGender
+                value={formData.gender}
+                onChange={(value) => handleInputChange("gender", value)}
               />
             </FormField>
 

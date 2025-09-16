@@ -107,7 +107,7 @@ export function CustomSelect({
       {/* Select Trigger */}
       <div
         className={cn(
-          "enhanced-select w-full cursor-pointer flex items-center justify-between",
+          "enhanced-input form-input bg-black border-0 text-white placeholder:text-spotify-text-gray focus:ring-2 focus:ring-spotify-green focus:outline-none w-full cursor-pointer flex items-center justify-between rounded-md",
           error && "border-red-500 focus:border-red-500",
           disabled && "opacity-50 cursor-not-allowed"
         )}
@@ -141,7 +141,7 @@ export function CustomSelect({
 
       {/* Dropdown Options */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-lg shadow-xl max-h-60 overflow-auto">
+        <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-md shadow-xl max-h-60 overflow-auto">
           {options.map((option, index) => {
             const IconComponent = option.icon;
             const isSelected = option.value === value;

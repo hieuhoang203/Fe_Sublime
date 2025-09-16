@@ -19,13 +19,14 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User, Mail, Phone, Calendar, MapPin, Shield } from "lucide-react";
+import { User, Mail, Calendar, MapPin, Shield } from "lucide-react";
+import { ToggleGender } from "@/components/ui/toggle-gender";
 
 interface UserFormData {
   id?: string;
   name: string;
   email: string;
-  phone: string;
+  gender: boolean; // true = Male, false = Female
   role: "admin" | "artist" | "user";
   status: "active" | "inactive";
   avatar?: string;
@@ -64,7 +65,7 @@ export function UserForm({
   const [formData, setFormData] = React.useState<UserFormData>({
     name: "",
     email: "",
-    phone: "",
+    gender: true, // true = Male, false = Female
     role: "user",
     status: "active",
     bio: "",
@@ -72,7 +73,7 @@ export function UserForm({
     ...initialData,
   });
 
-  const [errors, setErrors] = React.useState<Partial<UserFormData>>({});
+  const [errors, setErrors] = React.useState<Partial<Record<keyof UserFormData, string>>>({});
   const [avatarFile, setAvatarFile] = React.useState<File | null>(null);
 
   React.useEffect(() => {
@@ -82,7 +83,7 @@ export function UserForm({
   }, [initialData]);
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<UserFormData> = {};
+    const newErrors: Partial<Record<keyof UserFormData, string>> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
@@ -94,8 +95,8 @@ export function UserForm({
       newErrors.email = "Invalid email format";
     }
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone is required";
+    if (formData.gender === undefined || formData.gender === null) {
+      newErrors.gender = "Gender is required";
     }
 
     setErrors(newErrors);
@@ -113,7 +114,7 @@ export function UserForm({
     }
   };
 
-  const handleInputChange = (field: keyof UserFormData, value: string) => {
+  const handleInputChange = (field: keyof UserFormData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -179,12 +180,10 @@ export function UserForm({
               />
             </FormField>
 
-            <FormField label="Phone Number" required error={errors.phone}>
-              <FormInput
-                type="tel"
-                placeholder="Enter phone number"
-                value={formData.phone}
-                onChange={(value) => handleInputChange("phone", value)}
+            <FormField label="Gender" required error={errors.gender}>
+              <ToggleGender
+                value={formData.gender}
+                onChange={(value) => handleInputChange("gender", value)}
               />
             </FormField>
 
