@@ -80,6 +80,7 @@ export function MusicPlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const progressRef = useRef<HTMLDivElement>(null);
+  const volumeRef = useRef<HTMLDivElement>(null);
 
   // Mock progress update
   useEffect(() => {
@@ -110,8 +111,12 @@ export function MusicPlayer({
     const percentage = clickX / rect.width;
     const newTime = percentage * currentSong.duration;
 
+    setIsDragging(true);
     setCurrentTime(newTime);
     onSeek?.(newTime);
+
+    // Reset dragging state after a short delay
+    setTimeout(() => setIsDragging(false), 100);
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,22 +173,6 @@ export function MusicPlayer({
               {currentSong?.artist || "Unknown artist"}
             </p>
           </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onLikeToggle}
-            className="h-8 w-8 text-spotify-text-gray hover:text-white hover:bg-white/10 transition-all duration-200 self-start"
-          >
-            <Heart
-              className={cn(
-                "h-4 w-4",
-                currentSong?.isLiked
-                  ? "fill-spotify-green text-spotify-green hover:fill-spotify-green-hover hover:text-spotify-green-hover"
-                  : ""
-              )}
-            />
-          </Button>
         </div>
 
         {/* Center Section - Player Controls */}
@@ -258,6 +247,34 @@ export function MusicPlayer({
               ref={progressRef}
               className="flex-1 h-1 bg-spotify-light-gray rounded-full cursor-pointer group progress-bar-container"
               onClick={handleProgressClick}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+
+                const handleMouseMove = (moveEvent: MouseEvent) => {
+                  if (!progressRef.current || !currentSong?.duration) return;
+
+                  const rect = progressRef.current.getBoundingClientRect();
+                  const moveX = moveEvent.clientX - rect.left;
+                  const percentage = Math.min(
+                    Math.max(moveX / rect.width, 0),
+                    1
+                  );
+                  const newTime = percentage * currentSong.duration;
+
+                  setCurrentTime(newTime);
+                  onSeek?.(newTime);
+                };
+
+                const handleMouseUp = () => {
+                  setIsDragging(false);
+                  document.removeEventListener("mousemove", handleMouseMove);
+                  document.removeEventListener("mouseup", handleMouseUp);
+                };
+
+                document.addEventListener("mousemove", handleMouseMove);
+                document.addEventListener("mouseup", handleMouseUp);
+              }}
             >
               <div
                 className="h-full bg-spotify-green rounded-full relative group-hover:bg-spotify-green-hover transition-colors"
@@ -333,7 +350,7 @@ export function MusicPlayer({
             </Button>
 
             <div
-              ref={progressRef}
+              ref={volumeRef}
               className="w-20 h-1 bg-spotify-light-gray rounded-full cursor-pointer group relative"
               onClick={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -364,7 +381,7 @@ export function MusicPlayer({
 
                   const handleMouseMove = (moveEvent: MouseEvent) => {
                     const rect = (
-                      progressRef.current as HTMLDivElement
+                      volumeRef.current as HTMLDivElement
                     ).getBoundingClientRect();
                     const moveX = moveEvent.clientX - rect.left;
                     const newVolume = Math.min(
