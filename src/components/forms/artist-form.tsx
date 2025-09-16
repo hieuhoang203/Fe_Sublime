@@ -19,20 +19,16 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Mic, Mail, Phone, MapPin, Users, Music, Calendar } from "lucide-react";
+import { Mic, Mail, MapPin, Users, Music, Calendar } from "lucide-react";
 
 interface ArtistFormData {
   id?: string;
   name: string;
   email: string;
-  phone: string;
   status: "active" | "inactive";
   avatar?: string;
   bio?: string;
   location?: string;
-  genre?: string;
-  followers?: number;
-  totalSongs?: number;
   joinDate?: string;
   socialLinks?: {
     instagram?: string;
@@ -55,18 +51,6 @@ const statusOptions = [
   { value: "inactive", label: "Inactive" },
 ];
 
-const genreOptions = [
-  { value: "pop", label: "Pop" },
-  { value: "rock", label: "Rock" },
-  { value: "hip-hop", label: "Hip Hop" },
-  { value: "electronic", label: "Electronic" },
-  { value: "jazz", label: "Jazz" },
-  { value: "classical", label: "Classical" },
-  { value: "country", label: "Country" },
-  { value: "r&b", label: "R&B" },
-  { value: "other", label: "Other" },
-];
-
 export function ArtistForm({
   open,
   onOpenChange,
@@ -77,13 +61,9 @@ export function ArtistForm({
   const [formData, setFormData] = React.useState<ArtistFormData>({
     name: "",
     email: "",
-    phone: "",
     status: "active",
     bio: "",
     location: "",
-    genre: "",
-    followers: 0,
-    totalSongs: 0,
     socialLinks: {
       instagram: "",
       twitter: "",
@@ -113,14 +93,6 @@ export function ArtistForm({
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone is required";
-    }
-
-    if (!formData.genre) {
-      newErrors.genre = "Genre is required";
     }
 
     setErrors(newErrors);
@@ -220,29 +192,11 @@ export function ArtistForm({
               />
             </FormField>
 
-            <FormField label="Phone Number" required error={errors.phone}>
-              <FormInput
-                type="tel"
-                placeholder="Enter phone number"
-                value={formData.phone}
-                onChange={(value) => handleInputChange("phone", value)}
-              />
-            </FormField>
-
             <FormField label="Location">
               <FormInput
                 placeholder="Enter location"
                 value={formData.location || ""}
                 onChange={(value) => handleInputChange("location", value)}
-              />
-            </FormField>
-
-            <FormField label="Genre" required error={errors.genre}>
-              <FormSelect
-                value={formData.genre || ""}
-                onChange={(value) => handleInputChange("genre", value)}
-                options={genreOptions}
-                placeholder="Select genre"
               />
             </FormField>
 
@@ -254,31 +208,6 @@ export function ArtistForm({
                 }
                 options={statusOptions}
                 placeholder="Select status"
-              />
-            </FormField>
-          </div>
-
-          {/* Statistics */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <FormField label="Followers">
-              <FormInput
-                type="number"
-                placeholder="Enter follower count"
-                value={formData.followers?.toString() || ""}
-                onChange={(value) =>
-                  handleInputChange("followers", parseInt(value) || 0)
-                }
-              />
-            </FormField>
-
-            <FormField label="Total Songs">
-              <FormInput
-                type="number"
-                placeholder="Enter total songs"
-                value={formData.totalSongs?.toString() || ""}
-                onChange={(value) =>
-                  handleInputChange("totalSongs", parseInt(value) || 0)
-                }
               />
             </FormField>
           </div>
