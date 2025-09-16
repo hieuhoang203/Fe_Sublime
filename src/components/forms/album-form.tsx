@@ -19,7 +19,17 @@ import {
   FormSubmit,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Album, Music, Calendar, User, MapPin, Clock } from "lucide-react";
+import {
+  Album,
+  Music,
+  Calendar,
+  User,
+  MapPin,
+  Clock,
+  Search,
+  X,
+  ChevronDown,
+} from "lucide-react";
 
 interface AlbumFormData {
   id?: string;
@@ -27,7 +37,7 @@ interface AlbumFormData {
   artist: string;
   artistId?: string;
   releaseDate: string;
-  genre: string;
+  genres: string[];
   description?: string;
   coverImage?: string;
   totalTracks?: number;
@@ -94,7 +104,7 @@ export function AlbumForm({
     title: "",
     artist: "",
     releaseDate: "",
-    genre: "",
+    genres: [],
     description: "",
     totalTracks: 0,
     duration: "",
@@ -107,9 +117,12 @@ export function AlbumForm({
     ...initialData,
   });
 
-  const [errors, setErrors] = React.useState<Partial<AlbumFormData>>({});
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [coverFile, setCoverFile] = React.useState<File | null>(null);
   const [tagInput, setTagInput] = React.useState("");
+  const [showGenreDropdown, setShowGenreDropdown] = React.useState(false);
+  const [genreSearchTerm, setGenreSearchTerm] = React.useState("");
+  const [isGenreSelectFocused, setIsGenreSelectFocused] = React.useState(false);
 
   React.useEffect(() => {
     if (initialData) {
@@ -117,8 +130,25 @@ export function AlbumForm({
     }
   }, [initialData]);
 
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showGenreDropdown && !target.closest(".genre-search-container")) {
+        setShowGenreDropdown(false);
+        setGenreSearchTerm("");
+        setIsGenreSelectFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showGenreDropdown]);
+
   const validateForm = (): boolean => {
-    const newErrors: Partial<AlbumFormData> = {};
+    const newErrors: Record<string, string> = {};
 
     if (!formData.title.trim()) {
       newErrors.title = "Album title is required";
@@ -132,8 +162,8 @@ export function AlbumForm({
       newErrors.releaseDate = "Release date is required";
     }
 
-    if (!formData.genre) {
-      newErrors.genre = "Genre is required";
+    if (!formData.genres.length) {
+      newErrors.genres = "At least one genre is required";
     }
 
     if (formData.totalTracks && formData.totalTracks < 1) {
@@ -163,8 +193,45 @@ export function AlbumForm({
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value as any }));
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
+  };
+
+  // Filter genres based on search term
+  const filteredGenres = React.useMemo(() => {
+    if (!genreSearchTerm.trim()) return genreOptions;
+    return genreOptions.filter((genre) =>
+      genre.label.toLowerCase().includes(genreSearchTerm.toLowerCase())
+    );
+  }, [genreSearchTerm]);
+
+  const selectedGenres = genreOptions.filter((genre) =>
+    formData.genres.includes(genre.value)
+  );
+
+  const handleGenreToggle = (genreValue: string) => {
+    setFormData((prev) => {
+      const currentGenres = prev.genres || [];
+      const isSelected = currentGenres.includes(genreValue);
+
+      if (isSelected) {
+        return {
+          ...prev,
+          genres: currentGenres.filter((value) => value !== genreValue),
+        };
+      } else {
+        return {
+          ...prev,
+          genres: [...currentGenres, genreValue],
+        };
+      }
+    });
+    // Reset focus state when selecting a genre
+    setIsGenreSelectFocused(false);
   };
 
   const handleCoverChange = (file: File | null) => {
@@ -277,13 +344,151 @@ export function AlbumForm({
                 onChange={(value) => handleInputChange("releaseDate", value)}
               />
 
-              <FormField label="Genre" required error={errors.genre}>
-                <FormSelect
-                  value={formData.genre}
-                  onChange={(value) => handleInputChange("genre", value)}
-                  options={genreOptions}
-                  placeholder="Select genre"
-                />
+              <FormField label="Genres" required error={errors.genres}>
+                <div className="relative genre-search-container">
+                  {/* Searchable Select Display */}
+                  <div
+                    className="enhanced-select cursor-pointer flex items-center justify-between"
+                    style={{
+                      borderColor:
+                        isGenreSelectFocused || showGenreDropdown
+                          ? "#1db954"
+                          : undefined,
+                      boxShadow:
+                        isGenreSelectFocused || showGenreDropdown
+                          ? "0 0 0 2px #1db954, 0 4px 12px rgba(0, 0, 0, 0.2)"
+                          : undefined,
+                      transform:
+                        isGenreSelectFocused || showGenreDropdown
+                          ? "translateY(-1px)"
+                          : undefined,
+                    }}
+                    onClick={() => setShowGenreDropdown(!showGenreDropdown)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setShowGenreDropdown(!showGenreDropdown);
+                      }
+                    }}
+                    onFocus={() => setIsGenreSelectFocused(true)}
+                    onBlur={() => setIsGenreSelectFocused(false)}
+                    tabIndex={0}
+                    role="combobox"
+                    aria-expanded={showGenreDropdown}
+                    aria-haspopup="listbox"
+                  >
+                    <div className="flex items-center gap-2">
+                      {selectedGenres.length === 0 ? (
+                        <span className="text-spotify-text-gray">
+                          Select genres
+                        </span>
+                      ) : selectedGenres.length === 1 ? (
+                        <span className="text-white">
+                          {selectedGenres[0].label}
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="text-white">
+                            {selectedGenres[0].label}
+                          </span>
+                          <div className="bg-spotify-green/20 text-spotify-green px-2 py-1 rounded-full text-xs font-medium">
+                            +{selectedGenres.length - 1}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 text-spotify-text-gray transition-transform duration-200 ${
+                        showGenreDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+
+                  {/* Searchable Dropdown */}
+                  {showGenreDropdown && (
+                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-lg shadow-xl max-h-60 overflow-hidden">
+                      {/* Search Input */}
+                      <div className="p-3 border-b border-spotify-light-gray">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                          <input
+                            type="text"
+                            placeholder="Search genre"
+                            value={genreSearchTerm}
+                            onChange={(e) => setGenreSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-lg text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
+                            autoFocus
+                          />
+                          {genreSearchTerm && (
+                            <button
+                              type="button"
+                              onClick={() => setGenreSearchTerm("")}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-spotify-text-gray hover:text-white"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Genres List */}
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredGenres.length > 0 ? (
+                          filteredGenres.map((genre) => {
+                            const isSelected = formData.genres.includes(
+                              genre.value
+                            );
+                            return (
+                              <label
+                                key={genre.value}
+                                className="flex items-center gap-3 p-3 hover:bg-spotify-gray/50 cursor-pointer transition-colors group"
+                              >
+                                <div className="relative">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() =>
+                                      handleGenreToggle(genre.value)
+                                    }
+                                    className="sr-only"
+                                  />
+                                  <div
+                                    className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center group-hover:scale-105 ${
+                                      isSelected
+                                        ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
+                                        : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                                    }`}
+                                  >
+                                    {isSelected && (
+                                      <svg
+                                        className="w-3 h-3 text-black"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                    )}
+                                  </div>
+                                </div>
+                                <span className="text-white text-sm">
+                                  {genre.label}
+                                </span>
+                              </label>
+                            );
+                          })
+                        ) : (
+                          <div className="p-3 text-center text-spotify-text-gray text-sm">
+                            No genres found
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </FormField>
 
               <FormField label="Total Tracks" error={errors.totalTracks as any}>
