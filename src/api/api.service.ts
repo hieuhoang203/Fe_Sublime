@@ -1,4 +1,16 @@
+import { register } from "module";
 import axiosHelper from "./api.config";
+
+interface RegisterFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  agreeToTerms: boolean;
+  role: "user" | "artist";
+  stageName?: string;
+}
 
 const config = {
     headers: {
@@ -8,9 +20,9 @@ const config = {
 
 const apiPath = {
     AUTH: {
-        login: "/api/auth/login",
-        register: "/api/auth/register",
-        logout: "/auth/logout",
+        login: "/api/login",
+        register: "/api/register",
+        logout: "/api/logout",
     },
     SONG: {
         create: "/api/song/create",
@@ -63,7 +75,11 @@ const apiPath = {
     },
 };
 
-const AUTH = {}
+const AUTH = {
+    register: async (data: RegisterFormData) => {
+        return await axiosHelper().post(apiPath.AUTH.register, data);
+    }
+}
 
 const SONG = {}
 

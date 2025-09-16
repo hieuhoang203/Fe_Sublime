@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RegisterForm } from "@/components/forms/register-form";
 import { AuthLayout } from "@/components/layout/auth-layout";
+import { AXIOS_API } from "@/api/api.service";
 
 interface RegisterFormData {
   firstName: string;
@@ -25,21 +26,20 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      // Simulate API call
       await new Promise((resolve, reject) => {
         setTimeout(() => {
-          // Simulate registration logic
-          if (data.email === "admin@example.com") {
-            reject(new Error("Email already exists"));
-          } else {
-            resolve({ 
-              id: "new-user-id",
-              role: data.role,
-              name: `${data.firstName} ${data.lastName}`,
-              email: data.email
-            });
-          }
-        }, 3000);
+          const response = AXIOS_API.AUTH.register(data);
+          // if (response.) {
+          //   reject(new Error("Email already exists"));
+          // } else {
+          //   resolve({ 
+          //     id: "new-user-id",
+          //     role: data.role,
+          //     name: `${data.firstName} ${data.lastName}`,
+          //     email: data.email
+          //   });
+          // }
+        }, 5000);
       });
 
       // Redirect based on role
