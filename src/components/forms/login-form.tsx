@@ -122,14 +122,9 @@ export function LoginForm({
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`form-input-with-icon !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                className={`form-input-enhanced pl-10 ${
                   errors.email ? "!border-red-500" : ""
                 }`}
-                style={{
-                  backgroundColor: "#1a1a1a",
-                  color: "white",
-                  border: "1px solid transparent",
-                }}
               />
             </div>
             {errors.email && (
@@ -147,14 +142,9 @@ export function LoginForm({
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`form-input-with-icon-right !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                className={`form-input-enhanced pl-10 pr-10 ${
                   errors.password ? "!border-red-500" : ""
                 }`}
-                style={{
-                  backgroundColor: "#1a1a1a",
-                  color: "white",
-                  border: "1px solid transparent",
-                }}
               />
               <button
                 type="button"

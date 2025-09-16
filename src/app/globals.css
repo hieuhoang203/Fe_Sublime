@@ -221,10 +221,25 @@
 
 /* Enhanced input styles */
 .spotify-input {
-  @apply bg-spotify-light-gray border border-spotify-light-gray hover:border-spotify-green-50 focus:border-spotify-green text-white placeholder:text-spotify-text-gray rounded-lg py-2 transition-all duration-300 focus:ring-2 focus:ring-spotify-green-20;
+  @apply bg-spotify-light-gray border border-spotify-light-gray hover:border-spotify-green-50 focus:border-spotify-green text-white placeholder:text-spotify-text-gray rounded-lg py-2 transition-all duration-300 focus:ring-1 focus:ring-spotify-green-20;
   height: 48px !important;
   padding-left: 3rem !important; /* Ensure proper spacing for search icon */
   padding-right: 1rem !important;
+  border-width: 1px !important;
+}
+
+/* Form input with thinner border and consistent green color */
+.form-input-enhanced {
+  @apply bg-spotify-light-gray border border-spotify-light-gray hover:border-spotify-green-50 focus:border-spotify-green text-white placeholder:text-spotify-text-gray rounded-lg py-2 transition-all duration-300;
+  height: 48px !important;
+  border-width: 1px !important;
+  box-shadow: none !important;
+}
+
+.form-input-enhanced:focus {
+  border-color: #1db954 !important;
+  box-shadow: 0 0 0 1px #1db954 !important;
+  outline: none !important;
 }
 
   /* Placeholder styling for all inputs */

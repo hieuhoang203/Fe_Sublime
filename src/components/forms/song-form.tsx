@@ -19,12 +19,22 @@ import {
   FormSubmit,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Music, Clock, Calendar, User, Album, Upload } from "lucide-react";
+import {
+  Music,
+  Clock,
+  Calendar,
+  User,
+  Album,
+  Upload,
+  Search,
+  X,
+  ChevronDown,
+} from "lucide-react";
 
 interface SongFormData {
   id?: string;
   title: string;
-  artist: string;
+  artists: string[];
   album?: string;
   genre: string;
   duration: string;
@@ -82,7 +92,7 @@ export function SongForm({
 }: SongFormProps) {
   const [formData, setFormData] = React.useState<SongFormData>({
     title: "",
-    artist: "",
+    artists: [],
     album: "",
     genre: "",
     duration: "",
@@ -91,10 +101,11 @@ export function SongForm({
     ...initialData,
   });
 
-  const [errors, setErrors] = React.useState<Partial<SongFormData>>({});
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [audioFile, setAudioFile] = React.useState<File | null>(null);
   const [coverFile, setCoverFile] = React.useState<File | null>(null);
-  const [showCustomArtist, setShowCustomArtist] = React.useState(false);
+  const [showArtistDropdown, setShowArtistDropdown] = React.useState(false);
+  const [artistSearchTerm, setArtistSearchTerm] = React.useState("");
 
   React.useEffect(() => {
     if (initialData) {
@@ -102,15 +113,31 @@ export function SongForm({
     }
   }, [initialData]);
 
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showArtistDropdown && !target.closest(".artist-search-container")) {
+        setShowArtistDropdown(false);
+        setArtistSearchTerm("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showArtistDropdown]);
+
   const validateForm = (): boolean => {
-    const newErrors: Partial<SongFormData> = {};
+    const newErrors: Record<string, string> = {};
 
     if (!formData.title.trim()) {
       newErrors.title = "Song title is required";
     }
 
-    if (!formData.artist.trim()) {
-      newErrors.artist = "Artist is required";
+    if (!formData.artists.length) {
+      newErrors.artists = "At least one artist is required";
     }
 
     if (!formData.genre.trim()) {
@@ -143,11 +170,37 @@ export function SongForm({
     }
   };
 
-  const handleInputChange = (field: keyof SongFormData, value: string) => {
+  const handleInputChange = (
+    field: keyof SongFormData,
+    value: string | string[]
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
+  };
+
+  const handleArtistToggle = (artistId: string) => {
+    setFormData((prev) => {
+      const currentArtists = prev.artists || [];
+      const isSelected = currentArtists.includes(artistId);
+
+      if (isSelected) {
+        return {
+          ...prev,
+          artists: currentArtists.filter((id) => id !== artistId),
+        };
+      } else {
+        return {
+          ...prev,
+          artists: [...currentArtists, artistId],
+        };
+      }
+    });
   };
 
   const artistOptions = [
@@ -155,8 +208,19 @@ export function SongForm({
       value: artist.id,
       label: artist.name,
     })),
-    { value: "add_new", label: "+ Add New Artist" },
   ];
+
+  // Filter artists based on search term
+  const filteredArtists = React.useMemo(() => {
+    if (!artistSearchTerm.trim()) return artists;
+    return artists.filter((artist) =>
+      artist.name.toLowerCase().includes(artistSearchTerm.toLowerCase())
+    );
+  }, [artists, artistSearchTerm]);
+
+  const selectedArtists = artists.filter((artist) =>
+    formData.artists.includes(artist.id)
+  );
 
   const albumOptions = [
     { value: "", label: "No Album" },
@@ -264,42 +328,127 @@ export function SongForm({
                 />
               </FormField>
 
-              <FormField label="Artist" required error={errors.artist}>
-                {showCustomArtist ? (
-                  <div className="space-y-2">
-                    <FormInput
-                      placeholder="Enter artist name"
-                      value={formData.artist}
-                      onChange={(value) => handleInputChange("artist", value)}
+              <FormField label="Artists" required error={errors.artists}>
+                <div className="relative artist-search-container">
+                  {/* Searchable Select Display */}
+                  <div
+                    className="enhanced-select cursor-pointer flex items-center justify-between"
+                    onClick={() => setShowArtistDropdown(!showArtistDropdown)}
+                  >
+                    <div className="flex items-center gap-2">
+                      {selectedArtists.length === 0 ? (
+                        <span className="text-spotify-text-gray">
+                          Select artists
+                        </span>
+                      ) : selectedArtists.length === 1 ? (
+                        <span className="text-white">
+                          {selectedArtists[0].name}
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="text-white">
+                            {selectedArtists[0].name}
+                          </span>
+                          <div className="bg-spotify-green/20 text-spotify-green px-2 py-1 rounded-full text-xs font-medium">
+                            +{selectedArtists.length - 1}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 text-spotify-text-gray transition-transform duration-200 ${
+                        showArtistDropdown ? "rotate-180" : ""
+                      }`}
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setShowCustomArtist(false);
-                        handleInputChange("artist", "");
-                      }}
-                      className="text-xs"
-                    >
-                      ← Back to select from list
-                    </Button>
                   </div>
-                ) : (
-                  <FormSelect
-                    value={formData.artist}
-                    onChange={(value) => {
-                      if (value === "add_new") {
-                        setShowCustomArtist(true);
-                        handleInputChange("artist", "");
-                      } else {
-                        handleInputChange("artist", value);
-                      }
-                    }}
-                    options={artistOptions}
-                    placeholder="Select artist"
-                  />
-                )}
+
+                  {/* Searchable Dropdown */}
+                  {showArtistDropdown && (
+                    <div className="absolute z-50 w-full mt-1 bg-spotify-light-gray border border-spotify-light-gray rounded-lg shadow-xl max-h-60 overflow-hidden">
+                      {/* Search Input */}
+                      <div className="p-3 border-b border-spotify-light-gray">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-spotify-text-gray" />
+                          <input
+                            type="text"
+                            placeholder="Search artist"
+                            value={artistSearchTerm}
+                            onChange={(e) =>
+                              setArtistSearchTerm(e.target.value)
+                            }
+                            className="w-full pl-10 pr-10 py-2 bg-black border border-spotify-light-gray rounded-lg text-white placeholder:text-spotify-text-gray focus:outline-none focus:border-spotify-green"
+                            autoFocus
+                          />
+                          {artistSearchTerm && (
+                            <button
+                              type="button"
+                              onClick={() => setArtistSearchTerm("")}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-spotify-text-gray hover:text-white"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Artists List */}
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredArtists.length > 0 ? (
+                          filteredArtists.map((artist) => {
+                            const isSelected = formData.artists.includes(
+                              artist.id
+                            );
+                            return (
+                              <label
+                                key={artist.id}
+                                className="flex items-center gap-3 p-3 hover:bg-spotify-gray/50 cursor-pointer transition-colors group"
+                              >
+                                <div className="relative">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() =>
+                                      handleArtistToggle(artist.id)
+                                    }
+                                    className="sr-only"
+                                  />
+                                  <div
+                                    className={`w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center group-hover:scale-105 ${
+                                      isSelected
+                                        ? "bg-spotify-green border-spotify-green shadow-lg shadow-spotify-green/30"
+                                        : "bg-spotify-light-gray border-spotify-light-gray hover:border-spotify-green/50"
+                                    }`}
+                                  >
+                                    {isSelected && (
+                                      <svg
+                                        className="w-3 h-3 text-black"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                    )}
+                                  </div>
+                                </div>
+                                <span className="text-white text-sm">
+                                  {artist.name}
+                                </span>
+                              </label>
+                            );
+                          })
+                        ) : (
+                          <div className="p-3 text-center text-spotify-text-gray text-sm">
+                            No artists found
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </FormField>
 
               <FormDatePicker

@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Loader2,
   Check,
+  Mic,
 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -32,6 +33,7 @@ interface RegisterFormData {
   confirmPassword: string;
   agreeToTerms: boolean;
   role: "user" | "artist";
+  stageName?: string;
 }
 
 interface RegisterFormErrors {
@@ -42,6 +44,7 @@ interface RegisterFormErrors {
   confirmPassword?: string;
   agreeToTerms?: string;
   role?: string;
+  stageName?: string;
 }
 
 interface RegisterFormProps {
@@ -63,6 +66,7 @@ export function RegisterForm({
     confirmPassword: "",
     agreeToTerms: false,
     role: "user",
+    stageName: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -102,6 +106,11 @@ export function RegisterForm({
 
     if (!formData.agreeToTerms) {
       newErrors.agreeToTerms = "You must agree to the terms and conditions";
+    }
+
+    // Stage name validation for artists
+    if (formData.role === "artist" && !formData.stageName?.trim()) {
+      newErrors.stageName = "Stage name is required for artists";
     }
 
     setErrors(newErrors);
@@ -216,8 +225,8 @@ export function RegisterForm({
                 placeholder="First name"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange("firstName", e.target.value)}
-                className={`bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
-                  errors.firstName ? "border-red-500" : ""
+                className={`form-input-enhanced ${
+                  errors.firstName ? "!border-red-500" : ""
                 }`}
               />
               {errors.firstName && (
@@ -233,8 +242,8 @@ export function RegisterForm({
                 placeholder="Last name"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange("lastName", e.target.value)}
-                className={`bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
-                  errors.lastName ? "border-red-500" : ""
+                className={`form-input-enhanced ${
+                  errors.lastName ? "!border-red-500" : ""
                 }`}
               />
               {errors.lastName && (
@@ -242,6 +251,32 @@ export function RegisterForm({
               )}
             </div>
           </div>
+
+          {/* Stage Name Field - Only show for artists */}
+          {formData.role === "artist" && (
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-white">
+                Stage Name
+              </label>
+              <div className="relative">
+                <Mic className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/70" />
+                <Input
+                  type="text"
+                  placeholder="Enter your stage name"
+                  value={formData.stageName || ""}
+                  onChange={(e) =>
+                    handleInputChange("stageName", e.target.value)
+                  }
+                  className={`form-input-enhanced pl-10 ${
+                    errors.stageName ? "!border-red-500" : ""
+                  }`}
+                />
+              </div>
+              {errors.stageName && (
+                <p className="text-red-400 text-xs">{errors.stageName}</p>
+              )}
+            </div>
+          )}
 
           {/* Email Field */}
           <div className="space-y-1">
@@ -253,14 +288,9 @@ export function RegisterForm({
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`form-input-with-icon !bg-spotify-light-gray !border !border-transparent !text-white placeholder:!text-spotify-text-gray focus:!border-spotify-green focus:!outline-none ${
+                className={`form-input-enhanced pl-10 ${
                   errors.email ? "!border-red-500" : ""
                 }`}
-                style={{
-                  backgroundColor: "#1a1a1a",
-                  color: "white",
-                  border: "1px solid transparent",
-                }}
               />
             </div>
             {errors.email && (
@@ -278,8 +308,8 @@ export function RegisterForm({
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`form-input-with-icon-right bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
-                  errors.password ? "border-red-500" : ""
+                className={`form-input-enhanced pl-10 pr-10 ${
+                  errors.password ? "!border-red-500" : ""
                 }`}
               />
               <button
@@ -356,8 +386,8 @@ export function RegisterForm({
                 onChange={(e) =>
                   handleInputChange("confirmPassword", e.target.value)
                 }
-                className={`form-input-with-icon-right bg-spotify-light-gray border border-transparent text-white placeholder:text-spotify-text-gray focus:border-spotify-green focus:outline-none ${
-                  errors.confirmPassword ? "border-red-500" : ""
+                className={`form-input-enhanced pl-10 pr-10 ${
+                  errors.confirmPassword ? "!border-red-500" : ""
                 }`}
               />
               <button
