@@ -32,7 +32,7 @@ interface ArtistFormData {
   joinDate?: string;
   socialLinks?: {
     instagram?: string;
-    twitter?: string;
+    facebook?: string;
     youtube?: string;
     spotify?: string;
   };
@@ -66,7 +66,7 @@ export function ArtistForm({
     location: "",
     socialLinks: {
       instagram: "",
-      twitter: "",
+      facebook: "",
       youtube: "",
       spotify: "",
     },
@@ -121,7 +121,7 @@ export function ArtistForm({
   };
 
   const handleSocialLinkChange = (
-    platform: "instagram" | "twitter" | "youtube" | "spotify",
+    platform: "instagram" | "facebook" | "youtube" | "spotify",
     value: string
   ) => {
     setFormData((prev) => ({
@@ -236,11 +236,11 @@ export function ArtistForm({
                 />
               </FormField>
 
-              <FormField label="Twitter">
+              <FormField label="Facebook">
                 <FormInput
-                  placeholder="https://twitter.com/username"
-                  value={formData.socialLinks?.twitter || ""}
-                  onChange={(value) => handleSocialLinkChange("twitter", value)}
+                  placeholder="https://facebook.com/username"
+                  value={formData.socialLinks?.facebook || ""}
+                  onChange={(value) => handleSocialLinkChange("facebook", value)}
                 />
               </FormField>
 
