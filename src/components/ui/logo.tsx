@@ -4,16 +4,18 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   showText?: boolean;
   className?: string;
 }
 
 const sizeClasses = {
-  sm: "w-6 h-6",
-  md: "w-8 h-8",
-  lg: "w-10 h-10",
-  xl: "w-12 h-12",
+  sm: "w-7 h-7",
+  md: "w-10 h-10",
+  lg: "w-12 h-12",
+  xl: "w-14 h-14",
+  "2xl": "w-20 h-20",
+  "3xl": "w-24 h-24",
 };
 
 const textSizeClasses = {
@@ -21,6 +23,8 @@ const textSizeClasses = {
   md: "text-xl",
   lg: "text-2xl",
   xl: "text-3xl",
+  "2xl": "text-4xl",
+  "3xl": "text-5xl",
 };
 
 export function Logo({ size = "md", showText = true, className }: LogoProps) {
@@ -36,12 +40,38 @@ export function Logo({ size = "md", showText = true, className }: LogoProps) {
           src="/logo.png"
           alt="Sublime Logo"
           width={
-            size === "sm" ? 16 : size === "md" ? 20 : size === "lg" ? 24 : 28
+            size === "sm"
+              ? 20
+              : size === "md"
+              ? 26
+              : size === "lg"
+              ? 32
+              : size === "xl"
+              ? 38
+              : size === "2xl"
+              ? 50
+              : size === "3xl"
+              ? 62
+              : 26
           }
           height={
-            size === "sm" ? 16 : size === "md" ? 20 : size === "lg" ? 24 : 28
+            size === "sm"
+              ? 20
+              : size === "md"
+              ? 26
+              : size === "lg"
+              ? 32
+              : size === "xl"
+              ? 38
+              : size === "2xl"
+              ? 50
+              : size === "3xl"
+              ? 62
+              : 26
           }
-          className="text-black"
+          className="text-black object-contain"
+          quality={100}
+          priority
         />
       </div>
 

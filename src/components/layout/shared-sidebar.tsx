@@ -137,7 +137,7 @@ export function SharedSidebar({ userType }: SidebarProps) {
       >
         {/* Logo */}
         <div className={cn("animate-fade-in-up", isCollapsed ? "p-3" : "p-6")}>
-          <Logo size={isCollapsed ? "xl" : "md"} showText={!isCollapsed} />
+          <Logo size={isCollapsed ? "2xl" : "2xl"} showText={!isCollapsed} />
         </div>
 
         {/* Navigation */}

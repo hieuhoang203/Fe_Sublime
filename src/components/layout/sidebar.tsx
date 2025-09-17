@@ -73,7 +73,7 @@ export function Sidebar({ userType }: SidebarProps) {
     <div className="w-64 bg-gradient-to-b from-spotify-black via-spotify-gray to-spotify-black h-full flex flex-col shadow-2xl">
       {/* Logo */}
       <div className="p-6 animate-fade-in-up">
-        <Logo size="md" showText={true} />
+        <Logo size="2xl" showText={true} />
       </div>
 
       {/* Navigation */}
